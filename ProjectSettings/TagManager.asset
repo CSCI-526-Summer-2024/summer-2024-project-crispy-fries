@@ -4,12 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
+  - Spotlight
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Obstacle
+  - Background
   - Water
   - UI
   - 
