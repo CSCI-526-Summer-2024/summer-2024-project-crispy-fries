@@ -4,24 +4,48 @@ using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
+    public GameObject player;
+    public GameObject _tileMap;
+    public ShadowCaster2DCreator shadowCaster;
+    public Tilemap tileMap;
     public SpotLightManager spotLightManager;
+    // Hardcoded size of Tilemap grid
+    Vector3Int[] positions;
+    public TileBase[] tileArray;
+    private bool isOpened;
+
     // Start is called before the first frame update
     void Start()
     {
+        positions = new Vector3Int[3];
+        tileArray = new TileBase[positions.Length];
+        positions[0] = new Vector3Int(-1,-2,0);
+        positions[1] = new Vector3Int(-1,-3,0);
+        positions[2] = new Vector3Int(-1,-4,0);
+
+        // For prefabs getting Tilemap reference
+        _tileMap = GameObject.Find("Wall");
+        tileMap = _tileMap.GetComponent<Tilemap>();
+        shadowCaster = _tileMap.GetComponent<ShadowCaster2DCreator>();
+
+        isOpened = false;
     }
 
     
     void FixedUpdate()
     {
         Move();
-        
+        OpenDoor();
+        shadowCaster.Create();
     }
     // Update is called once per frame
     void Update() {
         SetLights();
+        SpawnClone();
     }
 
     void Move()
@@ -48,5 +72,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    void SpawnClone(){
+        if (Input.GetMouseButtonDown(0)){
+            Vector2 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Instantiate(player, new Vector3(cursorPos.x, cursorPos.y, 0), Quaternion.identity);
+        }
+    }
+
+    void OpenDoor(){
+        Vector3 playerPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        if(tileMap.WorldToCell(playerPos) == new Vector3(-6,2,0) && !isOpened){
+            Debug.Log("Stepped on button at: " + tileMap.WorldToCell(playerPos));
+            tileMap.SetTiles(positions, tileArray);
+            isOpened = true;
+        }
+    }
 }
 
