@@ -42,4 +42,13 @@ public class SpotLightManager : MonoBehaviour
             }
         }
     }
+
+    public GameObject[] getSpotLightArray(){
+        return spotLightArray;
+    }
+    public bool[] getlightEnabledArray(){
+        return lightEnabledArray;
+    }
+
+    
 }

@@ -8,9 +8,18 @@ using UnityEngine.Rendering.Universal;
 public class Player : MonoBehaviour
 {
     public SpotLightManager spotLightManager;
+    bool isInShadow = false;
+    private GameObject[] spotLightArray;
+
+    private bool[] lightEnabledArray; 
+
+    public LayerMask obstacleLayers;
+
     // Start is called before the first frame update
     void Start()
     {
+        spotLightArray = spotLightManager.getSpotLightArray();
+        lightEnabledArray = spotLightManager.getlightEnabledArray();
     }
 
     
@@ -21,7 +30,16 @@ public class Player : MonoBehaviour
     }
     // Update is called once per frame
     void Update() {
+        spotLightArray = spotLightManager.getSpotLightArray();
+        lightEnabledArray = spotLightManager.getlightEnabledArray();
         SetLights();
+        for (int i = 0; i < spotLightArray.Length; i++)
+        {
+            if (lightEnabledArray[i])
+            {
+                DetectInShadow(spotLightArray[i].transform);
+            }
+        }
     }
 
     void Move()
@@ -45,6 +63,38 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2)){
             spotLightManager.TurnOffLight(1);
+        }
+    }
+
+
+    void DetectInShadow(Transform lightSource)
+    {
+
+        
+        Vector3 direction = lightSource.position - transform.position;
+
+        // Check for an obstacle between the object and the light source
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, direction.magnitude, obstacleLayers);
+
+        // Debug.DrawRay(transform.position, direction, Color.red);
+
+
+        if (hit.collider != null)
+        {
+            Debug.Log("Obstacle detected: " + hit.collider.name + " for " + lightSource.name);
+            isInShadow = true;
+            
+            // spriteRenderer.color = Color.black;
+        }
+        else
+        {
+            // No obstacle detected
+            Debug.Log("Obstacle not detected for " + lightSource.name);
+            isInShadow = false;
+            
+
+            FindObjectOfType<LevelManager>().Restart();
+            // spriteRenderer.color = Color.white;
         }
     }
 
