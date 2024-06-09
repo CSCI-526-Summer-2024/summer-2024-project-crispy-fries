@@ -5,6 +5,7 @@ using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+
 public class Player : MonoBehaviour
 {
     public SpotLightManager spotLightManager;
@@ -37,7 +38,7 @@ public class Player : MonoBehaviour
         {
             if (lightEnabledArray[i])
             {
-                DetectInShadow(spotLightArray[i].transform);
+                DetectInShadow(spotLightArray[i]);
             }
         }
     }
@@ -67,11 +68,21 @@ public class Player : MonoBehaviour
     }
 
 
-    void DetectInShadow(Transform lightSource)
+    void DetectInShadow(GameObject light)
     {
+        Light2D lightComponent = light.GetComponent<Light2D>();
 
+
+        Transform lightSource = light.transform;
         
         Vector3 direction = lightSource.position - transform.position;
+
+        if (direction.sqrMagnitude > Mathf.Pow(lightComponent.pointLightOuterRadius, 2))
+        {
+            return;
+        }
+
+
 
         // Check for an obstacle between the object and the light source
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, direction.magnitude, obstacleLayers);
