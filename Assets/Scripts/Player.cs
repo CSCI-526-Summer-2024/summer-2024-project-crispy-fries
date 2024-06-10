@@ -16,6 +16,29 @@ public class Player : MonoBehaviour
 
     public LayerMask obstacleLayers;
 
+    private bool isFacingRight = true;
+
+    private float horizontal;
+
+    private float speed = 8f;
+    private float jumpingPower = 8f;
+
+    private bool isWallSliding;
+
+    private bool isWallJumping;
+    private float wallJumpingDirection;
+    private float wallJumpingTime = 0.2f;
+    private float wallJumpingCounter;
+    private float wallJumpingDuration = 0.4f;
+    private Vector2 wallJumpingPower = new Vector2(3f, 8f);
+
+    private float wallSlidingSpeed = 1.5f;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,13 +47,10 @@ public class Player : MonoBehaviour
     }
 
     
-    void FixedUpdate()
-    {
-        Move();
-        
-    }
+
     // Update is called once per frame
     void Update() {
+        Move();
         spotLightArray = spotLightManager.getSpotLightArray();
         lightEnabledArray = spotLightManager.getlightEnabledArray();
         SetLights();
@@ -39,24 +59,41 @@ public class Player : MonoBehaviour
             if(spotLightArray[i].GetComponent<SpotLightController>().DoesIlluminate(gameObject.transform.position, obstacleLayers))
             {
                 FindObjectOfType<LevelManager>().Restart();
-            }
+            }             
         }
     }
 
     void Move()
     {
-        float horizontalMoveSpeed = 10;
-        float verticalMoveSpeed = 7;
+        horizontal = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+        }
+
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        }
+
+        WallSlide();
+        WallJump();
+
+        if (!isWallJumping)
+        {
+            Flip();
+        }
+
+    }
 
 
-        float horizontalInput = Input.GetAxis ("Horizontal"); 
-        //Get the value of the Horizontal input axis.
-
-        float verticalInput = Input.GetAxis("Vertical");
-        //Get the value of the Vertical input axis.
-        
-        transform.Translate(new Vector3(horizontalInput*horizontalMoveSpeed, verticalInput*verticalMoveSpeed, 0) * Time.deltaTime);
-        //Move the object to XYZ coordinates defined as horizontalInput, 0, and verticalInput respectively.
+    private void FixedUpdate()
+    {
+        if (!isWallJumping)
+        {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        }
     }
 
     void SetLights(){
@@ -69,7 +106,78 @@ public class Player : MonoBehaviour
     }
 
 
-    
+    private bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
 
+    private bool IsWalled() {
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
+
+
+    private void WallSlide()
+    {
+        if (IsWalled() && !IsGrounded() && horizontal != 0f)
+        {
+            isWallSliding = true;
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+
+
+    private void WallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpingDirection = -transform.localScale.x;
+            wallJumpingCounter = wallJumpingTime;
+
+            CancelInvoke(nameof(StopWallJumping));
+        }
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f)
+        {
+            isWallJumping = true;
+            rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+            wallJumpingCounter = 0f;
+
+            if (transform.localScale.x != wallJumpingDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+
+            Invoke(nameof(StopWallJumping), wallJumpingDuration);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
+    }
+
+
+    private void Flip()
+    {
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
+    }
 }
 
