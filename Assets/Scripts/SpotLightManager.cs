@@ -31,14 +31,14 @@ public class SpotLightManager : MonoBehaviour
      */
     public void TurnOffLight(int lightNum){
         // Switch Specified Light Off
-        spotLightArray[lightNum].SetActive(false);
+        spotLightArray[lightNum].GetComponent<SpotLightController>().toggleLightOff();
         lightEnabledArray[lightNum] = false;
 
         // Ensure all other lights are on
         for (int i = 0; i < lightEnabledArray.Length; i++){
             if (i != lightNum){
                 lightEnabledArray[i] = true;
-                spotLightArray[i].SetActive(true);
+                spotLightArray[i].GetComponent<SpotLightController>().toggleLightOn();
             }
         }
     }

@@ -36,9 +36,9 @@ public class Player : MonoBehaviour
         SetLights();
         for (int i = 0; i < spotLightArray.Length; i++)
         {
-            if (lightEnabledArray[i])
+            if(spotLightArray[i].GetComponent<SpotLightController>().DoesIlluminate(gameObject.transform.position, obstacleLayers))
             {
-                DetectInShadow(spotLightArray[i]);
+                FindObjectOfType<LevelManager>().Restart();
             }
         }
     }
