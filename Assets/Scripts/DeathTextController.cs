@@ -20,22 +20,9 @@ public class DeathTextController : MonoBehaviour
 
     public void ShowAndFadeOutText()
     {
-        // Start the fade out coroutine
-        StartCoroutine(FadeOutText());
-        
-
-
-    }
-
-    private IEnumerator FadeOutText()
-    {
-        // Ensure the text is fully visible at the start
         youDiedText.alpha = 1f;
-
-        // Wait for a moment before starting the fade out (optional)
-        yield return new WaitForSecondsRealtime(2f);
-        youDiedText.alpha = 0f;
-
     }
+
+   
 }
 

@@ -9,6 +9,7 @@ using UnityEngine.Rendering.Universal;
 public class Player : MonoBehaviour
 {
     public SpotLightManager spotLightManager;
+    public LevelManager levelManager;
     bool isInShadow = false;
     private GameObject[] spotLightArray;
 
@@ -65,14 +66,15 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        
+        horizontal = levelManager.pauseInput?0:Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (!levelManager.pauseInput && Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (!levelManager.pauseInput && Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
