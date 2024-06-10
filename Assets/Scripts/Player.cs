@@ -45,16 +45,17 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        float moveSpeed = 10;
-        //Define the speed at which the object moves.
+        float horizontalMoveSpeed = 10;
+        float verticalMoveSpeed = 7;
+
 
         float horizontalInput = Input.GetAxis ("Horizontal"); 
         //Get the value of the Horizontal input axis.
 
         float verticalInput = Input.GetAxis("Vertical");
         //Get the value of the Vertical input axis.
-
-        transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * moveSpeed * Time.deltaTime);
+        
+        transform.Translate(new Vector3(horizontalInput*horizontalMoveSpeed, verticalInput*verticalMoveSpeed, 0) * Time.deltaTime);
         //Move the object to XYZ coordinates defined as horizontalInput, 0, and verticalInput respectively.
     }
 
@@ -68,46 +69,7 @@ public class Player : MonoBehaviour
     }
 
 
-    void DetectInShadow(GameObject light)
-    {
-        Light2D lightComponent = light.GetComponent<Light2D>();
-
-
-        Transform lightSource = light.transform;
-        
-        Vector3 direction = lightSource.position - transform.position;
-
-        if (direction.sqrMagnitude > Mathf.Pow(lightComponent.pointLightOuterRadius, 2))
-        {
-            return;
-        }
-
-
-
-        // Check for an obstacle between the object and the light source
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, direction.magnitude, obstacleLayers);
-
-        // Debug.DrawRay(transform.position, direction, Color.red);
-
-
-        if (hit.collider != null)
-        {
-            Debug.Log("Obstacle detected: " + hit.collider.name + " for " + lightSource.name);
-            isInShadow = true;
-            
-            // spriteRenderer.color = Color.black;
-        }
-        else
-        {
-            // No obstacle detected
-            Debug.Log("Obstacle not detected for " + lightSource.name);
-            isInShadow = false;
-            
-
-            FindObjectOfType<LevelManager>().Restart();
-            // spriteRenderer.color = Color.white;
-        }
-    }
+    
 
 }
 
