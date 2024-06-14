@@ -10,6 +10,7 @@ public class TextUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI deathText;
     [SerializeField] private TextMeshProUGUI winText;
+    [SerializeField] private TextMeshProUGUI hintText;
 
     private Scene currScene;
 
@@ -17,6 +18,7 @@ public class TextUIManager : MonoBehaviour
     void Start()
     {
         ShowAndFadeLevel();
+        ShowAndFadeHint();
     }
 
     public void ShowAndFadeLevel()
@@ -28,8 +30,12 @@ public class TextUIManager : MonoBehaviour
         StartCoroutine(ShowAndFadeDeathCoroutine());
     }
 
+    public void ShowAndFadeHint(){
+        StartCoroutine(ShowAndFadeHintCoroutine());
+    }
+
     public void WinGame(){
-        winText.alpha = 1f;
+        StartCoroutine(WinGameCoroutine());
     }
 
     // Only to be called by ShowAndFadeLevelName()
@@ -40,6 +46,7 @@ public class TextUIManager : MonoBehaviour
         string sceneName = currScene.name;
         levelText.text = sceneName;
         deathText.alpha = 0f;
+        hintText.alpha = 0;
         winText.alpha = 0;
         levelText.alpha = 1f;
         yield return new WaitForSeconds(2);
@@ -58,5 +65,19 @@ public class TextUIManager : MonoBehaviour
         // LoadScene must be called in coroutine because
         // LoadScene runs asyncronously and will mess up WaitForSeconds()
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private IEnumerator ShowAndFadeHintCoroutine()
+    {   
+        hintText.alpha = 1;
+        yield return new WaitForSeconds(2);
+        hintText.alpha = 0;
+    }
+
+    private IEnumerator WinGameCoroutine()
+    {
+        winText.alpha = 1f;
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(0);
     }
 }
