@@ -5,9 +5,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class TileTrigger : MonoBehaviour
-{
-    
-    public string nextSceneName; // Name of the next scene to load
+{    
+    [SerializeField] private LevelManager levelManager;
+
+    private void Start()
+    {
+        if (levelManager == null)
+        {
+            levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        }   
+    }
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -15,9 +22,7 @@ public class TileTrigger : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             Debug.Log("goal reached");
-            SceneManager.LoadScene(nextSceneName);
-            
+            levelManager.LoadNextScene();
         }
     }
-
 }

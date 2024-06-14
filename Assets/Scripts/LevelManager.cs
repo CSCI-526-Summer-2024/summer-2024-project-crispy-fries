@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,19 +7,34 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    public TextMeshProUGUI deathText;
+    public TextUIManager textUIManager;
+    private Scene currScene;
+    private int currBuildIndex;
+
+    void Start()
+    {
+        currScene = SceneManager.GetActiveScene();
+        currBuildIndex = currScene.buildIndex;
+        //textUIManager = FindObjectOfType<TextUIManager>();
+    }
 
     public bool pauseInput=false;
     public void Restart() {
-        StartCoroutine(RestartWithDelay());
-
+        pauseInput=true;
+        textUIManager.ShowAndFadeDeath();
     }
 
-    private IEnumerator RestartWithDelay()
+    public void LoadNextScene()
     {
-        pauseInput=true;
-        deathText.GetComponent<DeathTextController>().ShowAndFadeOutText();
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log(currBuildIndex);
+        Debug.Log(SceneManager.sceneCountInBuildSettings);
+        if (currBuildIndex >= SceneManager.sceneCountInBuildSettings - 1) {
+            // At last scene, you win!
+            textUIManager.WinGame();
+            pauseInput=true;
+        }
+        else {
+            SceneManager.LoadSceneAsync(++currBuildIndex);
+        }
     }
 }
