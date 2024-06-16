@@ -218,17 +218,17 @@ public class PlayerController : MonoBehaviour
                         GoToFloor();
                     }
                 }
-                // else if(feetOn == FloorType.Ceiling)
-                // {
-                //     if(isFacingRight)
-                //     {
-                //         GoToLeftWall();
-                //     }
-                //     else
-                //     {
-                //         GoToRightWall();
-                //     }
-                // }
+                else if(feetOn == FloorType.Ceiling)
+                {
+                    if(isFacingRight)
+                    {
+                        GoToRightWall();
+                    }
+                    else
+                    {
+                        GoToLeftWall();
+                    }
+                }
             }
         }
         
@@ -397,14 +397,16 @@ public class PlayerController : MonoBehaviour
 
     void GoToFloor()
     {
-        CheckIfWalled(); // Do i need this? other than for 1 tile gaps?
         float newX = transform.position.x;
         float newY = transform.position.y;
+
+        // Concave transition
         if(isGrounded)
         {
             newX = transform.position.x + (isFacingRight? 1:-1)*shadowDiveScale/2;
             newY = Mathf.Round(transform.position.y - shadowDiveScale/2) + shadowDiveScale/2 + positionOffset;
         }
+        // Convex transition
         else
         {
             if(feetOn ==FloorType.LeftWall)
@@ -425,21 +427,27 @@ public class PlayerController : MonoBehaviour
     }
     void GoToRightWall()
     {
-        CheckIfWalled(); // Do i need this? other than for 1 tile gaps?
 
         float newX = transform.position.x;
         float newY = transform.position.y;
-        // We are scaling a concave wall
+        // Covcave Transition
         if(isGrounded)
         {
             newX = Mathf.Round(transform.position.x + shadowDiveScale/2) - shadowDiveScale/2;
             newY = transform.position.y;
         }
-        // We are scaling a convex wall
+        // Convex Transition
         else
         {
+            if(feetOn ==FloorType.Ground)
+            {
+                newY = transform.position.y - shadowDiveScale/2;
+            }
+            else if(feetOn ==FloorType.Ceiling)
+            {
+                newY = transform.position.y + shadowDiveScale/2;
+            }
             newX = Mathf.Round(transform.position.x) - shadowDiveScale/2;
-            // newY = transform.position.y - shadowDiveScale/2;
         }
 
         transform.position = new Vector2(newX, newY);
@@ -448,27 +456,61 @@ public class PlayerController : MonoBehaviour
     }
     void GoToLeftWall()
     {
-        CheckIfWalled(); // Do i need this? other than for 1 tile gaps?
         float newX = transform.position.x;
         float newY = transform.position.y;
-        //Facing right while climbing a left wall. Means we are descending a convex wall
+        // Covcave Transition
         if(isGrounded)
         {
             newX = Mathf.Round(transform.position.x - shadowDiveScale/2) + shadowDiveScale/2;
             newY = transform.position.y;
         }
-        // We are decending down a convex wall
+        // Convex Transition
         else
         {
+            if(feetOn ==FloorType.Ground)
+            {
+                newY = transform.position.y - shadowDiveScale/2;
+            }
+            else if(feetOn ==FloorType.Ceiling)
+            {
+                newY = transform.position.y + shadowDiveScale/2;
+            }
             newX = Mathf.Round(transform.position.x) + shadowDiveScale/2;
-            // newY = transform.position.y- shadowDiveScale/2;
         }
+
         transform.position = new Vector2(newX, newY);
+        rb.velocity = new Vector2(0, rb.velocity.y);
         updateFeetOn(FloorType.LeftWall);
+
     }
     void GoToCeiling()
     {
-        CheckIfWalled(); // Do i need this? other than for 1 tile gaps?
+        float newX = transform.position.x;
+        float newY = transform.position.y;
+
+        // Concave transition
+        if(isGrounded)
+        {
+            newX = transform.position.x + (isFacingRight? 1:-1)*shadowDiveScale/2;
+            newY = Mathf.Round(transform.position.y - shadowDiveScale/2) + shadowDiveScale/2 + positionOffset;
+        }
+        // Convex transition
+        else
+        {
+            if(feetOn ==FloorType.LeftWall)
+            {
+                newX = transform.position.x - shadowDiveScale/2;
+            }
+            else if(feetOn ==FloorType.RightWall)
+            {
+                newX = transform.position.x + shadowDiveScale/2;
+
+            }
+            newY = Mathf.Round(transform.position.y) - shadowDiveScale/2 + positionOffset;
+        }
+
+        transform.position = new Vector2(newX, newY);
+        rb.velocity = new Vector2(rb.velocity.x, 0);
         updateFeetOn(FloorType.Ceiling);
     }
     
