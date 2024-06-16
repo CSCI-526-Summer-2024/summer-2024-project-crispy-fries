@@ -29,10 +29,9 @@ public class PlayerController : MonoBehaviour
 
     public float jumpForce = 10f;
     public LayerMask tileLayer;
-    // public LayerMask lightLayer;
-    // public LayerMask groundLayer; // Ensure this includes floating platforms
 
-    public float shadowDiveScale = 0.9f;
+    public GameManager gameManager;
+    
 
     private bool isFacingRight;
 
@@ -57,6 +56,10 @@ public class PlayerController : MonoBehaviour
     public Transform frontGroundCheck; // Ground check position
     public float checkRadius = 0.2f;
 
+    public float shadowDiveScale = 0.9f;
+    private Vector2 playerSizeNormal = new Vector2(0.9f, 1.9f);
+    private Vector2 playerSizeShadow;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -64,6 +67,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         isFacingRight = true;
         feetOn = FloorType.Ground;
+        playerSizeShadow = new Vector2(shadowDiveScale, shadowDiveScale);
     }
 
     void Update()
@@ -77,13 +81,15 @@ public class PlayerController : MonoBehaviour
                 HandleShadowDiveMovement();
                 break;
             case PlayerState.Dead:
-                // Handle death state (e.g., restart level)
                 break;
         }
     }
 
     void HandleNormalMovement()
     {
+        CheckPlayerDeath();
+        if(state == PlayerState.Dead) return;
+
         //Move horizontal
         float move = Input.GetAxis("Horizontal");
         Vector2 targetVelocity = new Vector2(move * normalSpeed, rb.velocity.y);
@@ -106,6 +112,9 @@ public class PlayerController : MonoBehaviour
 
     void HandleShadowDiveMovement()
     {
+        CheckPlayerDeath();
+        if(state == PlayerState.Dead) return;
+
         //Get desired move and update all checks before calculating what to do
         float move = Input.GetAxis("Horizontal");
         CheckFlip(move);
@@ -338,7 +347,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 3;
 
         spriteRenderer.sprite = normalSprite;
-        transform.localScale = new Vector3(0.9f * (isFacingRight? 1: -1),1.9f,1);
+        transform.localScale = new Vector3(playerSizeNormal.x * (isFacingRight? 1: -1),playerSizeNormal.y,1);
         // translate vertically by difference in centers so normal state doesnt end up in ground
         transform.position += new Vector3(0, (1.9f-0.9f)/2, 0);
         if(!isFacingRight) Flip();
@@ -353,7 +362,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0;
 
         spriteRenderer.sprite = shadowDiveSprite;
-        transform.localScale = new Vector3(shadowDiveScale * (isFacingRight? 1: -1),shadowDiveScale,1);
+        transform.localScale = new Vector3(playerSizeShadow.x * (isFacingRight? 1: -1),playerSizeShadow.y,1);
         // translate vertically by difference in centers so shadow state doesnt end up in the air
         transform.position += new Vector3(0, -(1.9f-0.9f)/2, 0);
         
@@ -362,7 +371,9 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         state = PlayerState.Dead;
-        // Handle death logic (animations, effects, restart level)
+        rb.velocity = Vector2.zero;
+        gameManager.levelManager.Restart();
+        
     }
 
     void updateFeetOn(FloorType newFloor)
@@ -526,17 +537,36 @@ public class PlayerController : MonoBehaviour
         isWalled = Physics2D.OverlapCircle(wallCheck.position, checkRadius, tileLayer);
     }
 
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (state == PlayerState.ShadowDive ())
-    //     {
-    //         // Logic for transitioning to shadow dive on another wall
-    //         if (collision.contacts[0].normal.y == 0) // Check if the collision is with a vertical surface
-    //         {
-    //             SetStateShadowDive();
-    //         }
-    //     }
-    // }
+    void CheckPlayerDeath()
+    {
+        Vector2[] corners = GetPlayerCorners();
+        GameObject[] lights = gameManager.spotLightManager.getSpotLightArray();
+        foreach (GameObject light in lights)
+        {
+            foreach (Vector2 corner in corners)
+            {
+                if(light.GetComponent<SpotLightController>().DoesIlluminate(corner, tileLayer))
+                {
+                    Die();
+                    return;
+                }
+            }
+        }
+    }
+
+    Vector2[] GetPlayerCorners()
+    {
+        Vector2 position = transform.position;
+        Vector2 size = (state == PlayerState.Normal) ? playerSizeNormal : playerSizeShadow;
+
+        return new Vector2[]
+        {
+            position + new Vector2(-size.x / 2, size.y / 2),  // Top-left
+            position + new Vector2(size.x / 2, size.y / 2),   // Top-right
+            position + new Vector2(-size.x / 2, -size.y / 2), // Bottom-left
+            position + new Vector2(size.x / 2, -size.y / 2)   // Bottom-right
+        };
+    }
 }
 
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public SpotLightManager spotLightManager;
+    public TextUIManager textUIManager;
+    public LevelManager levelManager;
     // Start is called before the first frame update
     void Start()
     {
