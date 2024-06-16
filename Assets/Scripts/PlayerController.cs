@@ -90,18 +90,30 @@ public class PlayerController : MonoBehaviour
         CheckPlayerDeath();
         if(state == PlayerState.Dead) return;
 
-        //Move horizontal
         float move = Input.GetAxis("Horizontal");
+        CheckFlip(move);
+        CheckIfGrounded();
+
+        if(feetOn == FloorType.None)
+        {
+            // need vertical velocity below some value so it doesnt get triggered immediately after jumping
+            if(isGrounded && rb.velocity.y<=0)
+            {
+                updateFeetOn(FloorType.Ground);
+            }
+        }
+
+        //Move horizontal
         Vector2 targetVelocity = new Vector2(move * normalSpeed, rb.velocity.y);
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
 
 
-        if (isGrounded && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)))
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space) && feetOn == FloorType.Ground)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded && feetOn == FloorType.Ground)
         {
             SetStateShadowDive();
         }
@@ -290,6 +302,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded && feetOn == FloorType.Ground)
         {
             SetStateNormal();
+            return;
+
         }
 
         if(isGrounded)
