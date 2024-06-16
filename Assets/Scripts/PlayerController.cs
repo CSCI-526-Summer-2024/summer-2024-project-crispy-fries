@@ -45,13 +45,13 @@ public class PlayerController : MonoBehaviour
     private Collider2D col;
 
     private SpriteRenderer spriteRenderer;
-    private bool isGrounded;
+    public bool isGrounded;
     private bool isWalled;
 
     // Used when manually setting position to prevent rigid body issues
     private float positionOffset = 0.01f;
 
-    private FloorType feetOn;
+    public FloorType feetOn;
     public Transform groundCheck; // Ground check position
     public Transform wallCheck; // Wall check position
 
@@ -61,6 +61,9 @@ public class PlayerController : MonoBehaviour
     public float shadowDiveScale = 0.9f;
     private Vector2 playerSizeNormal = new Vector2(0.9f, 1.9f);
     private Vector2 playerSizeShadow;
+
+    //For debugging isGrounded and feetOn
+    public float verticalSpeed;
 
     private int sceneIndex;
 
@@ -95,6 +98,7 @@ public class PlayerController : MonoBehaviour
             case PlayerState.Dead:
                 break;
         }
+        verticalSpeed = rb.velocity.y;
     }
 
     
@@ -111,7 +115,7 @@ public class PlayerController : MonoBehaviour
         if(feetOn == FloorType.None)
         {
             // need vertical velocity below some value so it doesnt get triggered immediately after jumping
-            if(isGrounded && rb.velocity.y<=0)
+            if(isGrounded && rb.velocity.y<=0.01f)
             {
                 updateFeetOn(FloorType.Ground);
             }
