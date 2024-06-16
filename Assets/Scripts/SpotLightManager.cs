@@ -20,7 +20,12 @@ public class SpotLightManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Alpha1)){
+            TurnOffLight(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)){
+            TurnOffLight(1);
+        }
     }
 
     /*
