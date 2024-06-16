@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "game_prototype.sln"
+    "dotnet.defaultSolution": "summer-2024-project-crispy-fries.sln"
 }

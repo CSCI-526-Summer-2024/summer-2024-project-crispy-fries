@@ -130,6 +130,40 @@ public class SpotLightController : MonoBehaviour
 
     }
 
+
+        public bool IfInTheShadow(Vector2 point, LayerMask obstacleLayer)
+    {
+        // If light is off, return false
+        Vector2 spotlightPosition = transform.position;
+        Vector2 direction = point - spotlightPosition;
+
+        // Check if the point is within the spotlight's radius
+        if (direction.magnitude > radius)
+        {
+            return false;
+        }
+
+
+        // Calculate the angle between the spotlight's forward direction and the vector to the point
+        float angleToPoint = Vector2.Angle(transform.up, direction);
+
+        // Check if the angle to the point is within the spotlight's angle
+        if (angleToPoint > angle / 2f)
+        {
+            return false;
+        }
+        // Cast a ray from the spotlight towards the point with the spotlight's radius as the maximum distance
+        RaycastHit2D hit = Physics2D.Raycast(spotlightPosition, direction, radius, obstacleLayer);
+        if (hit.collider != null && hit.distance < direction.magnitude)
+        {
+            Debug.Log("Obstructed");
+            return false; // Point is obstructed, not illuminated
+        }
+        return true; 
+
+    }
+
+    
     void Awake()
     {
         UpdateSpotLightProperties();

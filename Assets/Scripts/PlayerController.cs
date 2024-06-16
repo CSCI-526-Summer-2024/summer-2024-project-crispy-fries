@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Networking;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private string URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfOGYgVRRp-6DSuW2OLMH2o6p_P-htPqSgNTqotq8QVgaTIzg/formResponse";
     public enum PlayerState
     {
         Normal,
@@ -60,6 +62,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 playerSizeNormal = new Vector2(0.9f, 1.9f);
     private Vector2 playerSizeShadow;
 
+    private int sceneIndex;
+
+    private int randomId;
+    private int[] lightShadowData;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -68,6 +76,10 @@ public class PlayerController : MonoBehaviour
         isFacingRight = true;
         feetOn = FloorType.Ground;
         playerSizeShadow = new Vector2(shadowDiveScale, shadowDiveScale);
+        lightShadowData = new int[gameManager.spotLightManager.getSpotLightArray().Length];
+        sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        randomId = UnityEngine.Random.Range(100000, 999999);
+
     }
 
     void Update()
@@ -84,6 +96,8 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
+    
 
     void HandleNormalMovement()
     {
@@ -384,6 +398,7 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
+        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData));
         state = PlayerState.Dead;
         rb.velocity = Vector2.zero;
         gameManager.levelManager.Restart();
@@ -405,7 +420,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.eulerAngles = new Vector3(0,0,-90);
         }
-        else //feetOn == FloorType.Ceiling
+        else
         {
             transform.eulerAngles = new Vector3(0,0,180);
         }
@@ -555,14 +570,20 @@ public class PlayerController : MonoBehaviour
     {
         Vector2[] corners = GetPlayerCorners();
         GameObject[] lights = gameManager.spotLightManager.getSpotLightArray();
-        foreach (GameObject light in lights)
+        for (int i = 0; i < lights.Length; i++) 
         {
+            GameObject light = lights[i];
+            bool count = false;
             foreach (Vector2 corner in corners)
             {
                 if(light.GetComponent<SpotLightController>().DoesIlluminate(corner, tileLayer))
                 {
                     Die();
+                    
                     return;
+                } else if (!count && light.GetComponent<SpotLightController>().IfInTheShadow(corner, tileLayer)){
+                    lightShadowData[i]++;
+                    count = true;
                 }
             }
         }
@@ -580,5 +601,37 @@ public class PlayerController : MonoBehaviour
             position + new Vector2(-size.x / 2, -size.y / 2), // Bottom-left
             position + new Vector2(size.x / 2, -size.y / 2)   // Bottom-right
         };
+    }
+
+
+
+
+    private IEnumerator Post(string randomId, string sceneIndex, int[] light)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("entry.1662667842", randomId);
+        form.AddField("entry.1637880345", sceneIndex);
+        String[] FormFieldForLight = new String[4];
+        FormFieldForLight[0] = "entry.1465073703";
+        FormFieldForLight[1] = "entry.1443173421";
+        FormFieldForLight[2] = "entry.1597942742";
+        FormFieldForLight[3] = "entry.2028998425";
+        for (int i = 0; i< light.Length; i++)
+        {
+            form.AddField(FormFieldForLight[i], ((byte)light[i]).ToString());
+            Debug.Log("Light " + i + " : " + light[i]);
+        }
+        using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
+        {
+            yield return www.SendWebRequest();
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+            }
+        }
     }
 }
