@@ -22,7 +22,9 @@ public class TileTrigger : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             Debug.Log("goal reached");
-            levelManager.LoadNextScene();
+
+            WinMenu.LevelIsComplete = true;
+            //levelManager.LoadNextScene();
         }
     }
 }
