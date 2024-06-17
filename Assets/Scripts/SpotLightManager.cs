@@ -43,7 +43,7 @@ public class SpotLightManager : MonoBehaviour
     public void TurnOffLight(int lightNum){
         if(lightNum>= toggleableLightCount) return;
         // Switch Specified Light Off
-        spotLightArray[lightNum].GetComponent<SpotLightController>().toggleLightOff();
+        spotLightArray[lightNum].GetComponent<SpotLightController>().toggleLight();
 
         // Ensure all other lights are on
         for (int i = 0; i < toggleableLightCount; i++){
