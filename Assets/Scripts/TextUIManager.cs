@@ -78,6 +78,6 @@ public class TextUIManager : MonoBehaviour
     {
         winText.alpha = 1f;
         yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(0);
     }
 }
