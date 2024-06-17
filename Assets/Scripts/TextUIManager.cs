@@ -70,7 +70,7 @@ public class TextUIManager : MonoBehaviour
     private IEnumerator ShowAndFadeHintCoroutine()
     {   
         hintText.alpha = 1;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
         hintText.alpha = 0;
     }
 

@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public PlayerState state = PlayerState.Normal;
-    public float normalSpeed = 15f;
-    public float shadowDiveSpeed = 15f;
+    public float normalSpeed = 9f;
+    public float shadowDiveSpeed = 6f;
 
     public float jumpForce = 10f;
     public LayerMask tileLayer;
@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
     public Sprite shadowDiveSprite;
 
     private Rigidbody2D rb;
-    private Collider2D col;
 
     private SpriteRenderer spriteRenderer;
     public bool isGrounded;
@@ -74,7 +73,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         isFacingRight = true;
         feetOn = FloorType.Ground;
@@ -316,8 +314,8 @@ public class PlayerController : MonoBehaviour
         
 
 
-        // Transform back to normal state only on ground
-        if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded && feetOn == FloorType.Ground)
+       
+        if (Input.GetKeyDown(KeyCode.UpArrow) && canTransformToNormal())
         {
             SetStateNormal();
             return;
@@ -371,6 +369,21 @@ public class PlayerController : MonoBehaviour
         Vector3 scaler = transform.localScale;
         scaler.x *= -1;
         transform.localScale = scaler;
+    }
+
+    bool canTransformToNormal()
+    {
+         // Transform back to normal state only on ground
+        if(isGrounded && feetOn == FloorType.Ground)
+        {
+            //Check that there is no platform right above player
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, tileLayer);
+            if(hit.collider == null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void SetStateNormal()

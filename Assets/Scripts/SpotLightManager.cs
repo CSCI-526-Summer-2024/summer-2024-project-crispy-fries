@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SpotLightManager : MonoBehaviour
 {
-    public GameObject[] spotLightArray;
-    private bool[] lightEnabledArray;
+
+    [SerializeField]
+    private GameObject[] spotLightArray;
+
+    [SerializeField]
+    private int toggleableLightCount;
     
     // Start is called before the first frame update
     void Start()
     {
-        lightEnabledArray = new bool[spotLightArray.Length];
-        // Initialize all lights to be on
-        for (int i = 0; i < spotLightArray.Length; i++){
-            lightEnabledArray[i] = true;
-        }
+
     }
 
     // Update is called once per frame
@@ -26,23 +26,28 @@ public class SpotLightManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha2)){
             TurnOffLight(1);
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha3)){
+            TurnOffLight(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4)){
+            TurnOffLight(3);
+        }
+
     }
 
     /*
-     *  Turns off a single specified light in the lightEnabledArray.
-     *  All other lights will be left on.
-     *  As of now, we dont really need lightEnabledArray but it may be handy in 
-     *  the future when implementing the ability to turn multiple lights off.
+     *  Turns off a single specified light.
+     *  All other lights will be turned on.
+     *  Ensure Toggleable lights come before non toggleable ones
      */
     public void TurnOffLight(int lightNum){
+        if(lightNum>= toggleableLightCount) return;
         // Switch Specified Light Off
         spotLightArray[lightNum].GetComponent<SpotLightController>().toggleLightOff();
-        lightEnabledArray[lightNum] = false;
 
         // Ensure all other lights are on
-        for (int i = 0; i < lightEnabledArray.Length; i++){
+        for (int i = 0; i < toggleableLightCount; i++){
             if (i != lightNum){
-                lightEnabledArray[i] = true;
                 spotLightArray[i].GetComponent<SpotLightController>().toggleLightOn();
             }
         }
@@ -50,9 +55,6 @@ public class SpotLightManager : MonoBehaviour
 
     public GameObject[] getSpotLightArray(){
         return spotLightArray;
-    }
-    public bool[] getlightEnabledArray(){
-        return lightEnabledArray;
     }
 
     
