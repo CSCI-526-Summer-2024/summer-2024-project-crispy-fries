@@ -42,7 +42,7 @@ public class WinMenu : MonoBehaviour
                 // Last level
                 Debug.Log("Last Level!");
                 continueButton.SetActive(false);
-                winText.text = "Game Completed!";
+                winText.text = "Game Completed! Congrats";
             }
             else {
                 winText.text = "Level Completed!";

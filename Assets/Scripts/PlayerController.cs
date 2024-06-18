@@ -645,7 +645,7 @@ public class PlayerController : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("entry.1662667842", randomId);
         form.AddField("entry.1637880345", sceneIndex);
-        string productName = Application.productName;
+        string productName = gameManager.buildName;
         string version = Application.version;  
         string buildName = productName + "_" + version;
         form.AddField("entry.754931394", buildName);
