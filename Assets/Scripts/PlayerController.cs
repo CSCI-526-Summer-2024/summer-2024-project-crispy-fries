@@ -425,7 +425,7 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData));
+        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData, true));
         state = PlayerState.Dead;
         rb.velocity = Vector2.zero;
         gameManager.levelManager.Restart();
@@ -434,6 +434,7 @@ public class PlayerController : MonoBehaviour
 
     public void Win()
     {
+        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData, false));
         state = PlayerState.Win;
         rb.velocity = Vector2.zero;
     }
@@ -639,11 +640,16 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private IEnumerator Post(string randomId, string sceneIndex, int[] light)
+    private IEnumerator Post(string randomId, string sceneIndex, int[] light, bool isDead)
     {
         WWWForm form = new WWWForm();
         form.AddField("entry.1662667842", randomId);
         form.AddField("entry.1637880345", sceneIndex);
+        string productName = Application.productName;
+        string version = Application.version;  
+        string buildName = productName + "_" + version;
+        form.AddField("entry.754931394", buildName);
+        form.AddField("entry.1060833998", isDead ? "Dead":"Win");
         String[] FormFieldForLight = new String[4];
         FormFieldForLight[0] = "entry.1465073703";
         FormFieldForLight[1] = "entry.1443173421";
