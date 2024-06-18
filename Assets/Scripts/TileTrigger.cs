@@ -6,6 +6,8 @@ using UnityEngine.Tilemaps;
 
 public class TileTrigger : MonoBehaviour
 {    
+    [SerializeField] private GameManager gameManager;
+
     [SerializeField] private LevelManager levelManager;
 
     private void Start()
@@ -22,7 +24,9 @@ public class TileTrigger : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             Debug.Log("goal reached");
-            levelManager.LoadNextScene();
+            WinMenu.LevelIsComplete = true;
+            gameManager.player.GetComponent<PlayerController>().Win();
+            //levelManager.LoadNextScene();
         }
     }
 }
