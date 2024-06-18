@@ -6,6 +6,8 @@ using UnityEngine.Tilemaps;
 
 public class TileTrigger : MonoBehaviour
 {    
+    [SerializeField] private GameManager gameManager;
+
     [SerializeField] private LevelManager levelManager;
 
     private void Start()
@@ -23,6 +25,7 @@ public class TileTrigger : MonoBehaviour
         {
             Debug.Log("goal reached");
             WinMenu.LevelIsComplete = true;
+            gameManager.player.GetComponent<PlayerController>().Win();
             //levelManager.LoadNextScene();
         }
     }

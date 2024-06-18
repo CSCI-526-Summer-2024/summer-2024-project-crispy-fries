@@ -49,7 +49,7 @@ public class TextUIManager : MonoBehaviour
         hintText.alpha = 0;
         winText.alpha = 0;
         levelText.alpha = 1f;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
         levelText.alpha = 0f;
     }
 

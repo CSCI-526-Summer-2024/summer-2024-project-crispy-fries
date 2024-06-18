@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public SpotLightManager spotLightManager;
     public TextUIManager textUIManager;
     public LevelManager levelManager;
+
+    public GameObject player;
     // Start is called before the first frame update
     void Start()
     {

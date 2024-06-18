@@ -13,7 +13,9 @@ public class PlayerController : MonoBehaviour
     {
         Normal,
         ShadowDive,
-        Dead
+        Dead,
+
+        Win
     }
 
     public enum FloorType
@@ -95,6 +97,8 @@ public class PlayerController : MonoBehaviour
                 HandleShadowDiveMovement();
                 break;
             case PlayerState.Dead:
+                break;
+            case PlayerState.Win:
                 break;
         }
         verticalSpeed = rb.velocity.y;
@@ -426,6 +430,12 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero;
         gameManager.levelManager.Restart();
         
+    }
+
+    public void Win()
+    {
+        state = PlayerState.Win;
+        rb.velocity = Vector2.zero;
     }
 
     void updateFeetOn(FloorType newFloor)
