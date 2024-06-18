@@ -12,6 +12,9 @@ public class WinMenu : MonoBehaviour
 
     private string sceneName;
     private int levelNumber;
+    private int currBuildIndex;
+
+    [SerializeField] private LevelManager levelManager;
 
     // Start is called before the first frame update
     void Start()
@@ -19,11 +22,13 @@ public class WinMenu : MonoBehaviour
         WinMenuUI.SetActive(false);
 
         Scene currentScene = SceneManager.GetActiveScene();
+        currBuildIndex = currentScene.buildIndex;
 
         sceneName = currentScene.name;
 
         // Extract the level number
         levelNumber = GetLevelNumber(sceneName);
+        levelManager = FindAnyObjectByType<LevelManager>();
     }
 
 
@@ -51,17 +56,7 @@ public class WinMenu : MonoBehaviour
 
     public void Resume()
     {
-        string nextLevelName = "Level " + (levelNumber + 1);
-
-        if (IsLevelInBuildSettings(nextLevelName))
-        {
-            SceneManager.LoadScene(nextLevelName);
-        }
-        else
-        {
-            // If the next level does not exist, load the Level Selection scene
-            SceneManager.LoadScene("Level Selection");
-        }
+        levelManager.LoadNextScene();
         LevelIsComplete = false;
     }
     private bool IsLevelInBuildSettings(string levelName)

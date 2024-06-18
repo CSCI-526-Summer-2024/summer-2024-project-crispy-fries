@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour
         if (currBuildIndex >= SceneManager.sceneCountInBuildSettings - 1) {
             // At last scene, you win!
             //textUIManager.WinGame();
-            WinMenu.LevelIsComplete = true;
+            SceneManager.LoadSceneAsync(0); // Load select screen
             pauseInput=true;
         }
         else {
