@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class WinMenu : MonoBehaviour
 {
@@ -11,10 +13,11 @@ public class WinMenu : MonoBehaviour
     public GameObject WinMenuUI;
 
     private string sceneName;
-    private int levelNumber;
     private int currBuildIndex;
 
     [SerializeField] private LevelManager levelManager;
+    [SerializeField] private GameObject continueButton;
+    [SerializeField] private TMP_Text winText;
 
     // Start is called before the first frame update
     void Start()
@@ -25,9 +28,6 @@ public class WinMenu : MonoBehaviour
         currBuildIndex = currentScene.buildIndex;
 
         sceneName = currentScene.name;
-
-        // Extract the level number
-        levelNumber = GetLevelNumber(sceneName);
         levelManager = FindAnyObjectByType<LevelManager>();
     }
 
@@ -38,20 +38,17 @@ public class WinMenu : MonoBehaviour
         if (LevelIsComplete)
         {
             WinMenuUI.SetActive(true);
+            if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
+                // Last level
+                Debug.Log("Last Level!");
+                continueButton.SetActive(false);
+                winText.text = "You win!";
+            }
+            else {
+                winText.text = "Level Complete!";
+            }
         }
 
-    }
-
-    int GetLevelNumber(string sceneName)
-    {
-        // Assuming the scene name format is "level X" where X is the level number
-        string[] parts = sceneName.Split(' ');
-        if (parts.Length > 1)
-        {
-            int.TryParse(parts[1], out int levelNumber);
-            return levelNumber;
-        }
-        return -1;
     }
 
     public void Resume()
@@ -59,20 +56,7 @@ public class WinMenu : MonoBehaviour
         levelManager.LoadNextScene();
         LevelIsComplete = false;
     }
-    private bool IsLevelInBuildSettings(string levelName)
-    {
-        int sceneCount = SceneManager.sceneCountInBuildSettings;
-        for (int i = 0; i < sceneCount; i++)
-        {
-            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-            string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
-            if (sceneName == levelName)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+
     public void LoadMenu()
     {
         SceneManager.LoadScene("Level Selection");

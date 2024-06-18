@@ -514,7 +514,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 270.98334, y: 101}
+  m_AnchoredPosition: {x: 12, y: -16}
   m_SizeDelta: {x: 652, y: -660.00006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1628325240306718466
@@ -579,7 +579,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 8942749433435311719}
   - component: {fileID: 2411676462114311996}
   m_Layer: 5
-  m_Name: ResumeButton
+  m_Name: ContinueButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -812,7 +812,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Resume
+  m_text: Continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1130,3 +1130,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WinMenuUI: {fileID: 762315658886164087}
+  levelManager: {fileID: 0}
+  continueButton: {fileID: 4575363182929396768}
+  winText: {fileID: 9108412230959119167}
