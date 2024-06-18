@@ -720,7 +720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 618439088355204909, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: sceneName
-      value: BaseLevel
+      value: Level 1
       objectReference: {fileID: 0}
     - target: {fileID: 5384271021324715680, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_Name

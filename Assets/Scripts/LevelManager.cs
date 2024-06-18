@@ -30,7 +30,8 @@ public class LevelManager : MonoBehaviour
         Debug.Log(SceneManager.sceneCountInBuildSettings);
         if (currBuildIndex >= SceneManager.sceneCountInBuildSettings - 1) {
             // At last scene, you win!
-            textUIManager.WinGame();
+            //textUIManager.WinGame();
+            WinMenu.LevelIsComplete = true;
             pauseInput=true;
         }
         else {

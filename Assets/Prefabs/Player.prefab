@@ -174,21 +174,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0729bd521c6c9406d883763db1350a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  URL: https://docs.google.com/forms/u/0/d/e/1FAIpQLSfOGYgVRRp-6DSuW2OLMH2o6p_P-htPqSgNTqotq8QVgaTIzg/formResponse
   state: 0
   normalSpeed: 15
   shadowDiveSpeed: 3
-  jumpForce: 10
+  normalJumpForce: 15
+  shadowJumpForce: 5
   tileLayer:
     serializedVersion: 2
     m_Bits: 512
   gameManager: {fileID: 0}
   normalSprite: {fileID: 21300000, guid: 957c3d77eef334dc38320e9239bb28fe, type: 3}
   shadowDiveSprite: {fileID: 21300000, guid: f1eeef8385426429abe61bc552b41d15, type: 3}
+  isGrounded: 0
+  feetOn: 0
   groundCheck: {fileID: 5251940283507290156}
   wallCheck: {fileID: 3717398852966903932}
   frontGroundCheck: {fileID: 8085533684116311409}
   checkRadius: 0.2
   shadowDiveScale: 0.9
+  verticalSpeed: 0
 --- !u!1 &4105807898819779157
 GameObject:
   m_ObjectHideFlags: 0

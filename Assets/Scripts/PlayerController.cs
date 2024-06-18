@@ -29,7 +29,8 @@ public class PlayerController : MonoBehaviour
     public float normalSpeed = 9f;
     public float shadowDiveSpeed = 6f;
 
-    public float jumpForce = 10f;
+    public float normalJumpForce = 15f;
+    public float shadowJumpForce = 5f;
     public LayerMask tileLayer;
 
     public GameManager gameManager;
@@ -340,17 +341,22 @@ public class PlayerController : MonoBehaviour
     {
         if(feetOn == FloorType.Ground)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            // Different jump heights based on player state
+            if (state == PlayerState.Normal) {
+                rb.velocity = new Vector2(rb.velocity.x, normalJumpForce);
+            } else if (state == PlayerState.ShadowDive) {
+                rb.velocity = new Vector2(rb.velocity.x, shadowJumpForce);
+            }
         }
         else if(feetOn == FloorType.RightWall)
         {
-            rb.velocity = new Vector2(-jumpForce, rb.velocity.y);
+            rb.velocity = new Vector2(-normalJumpForce, rb.velocity.y);
             //Discuss: Face player left on jumping from right wall and vice versa
             if(isFacingRight) Flip();
         }
         else if(feetOn == FloorType.LeftWall)
         {
-            rb.velocity = new Vector2(jumpForce, rb.velocity.y);
+            rb.velocity = new Vector2(normalJumpForce, rb.velocity.y);
             if(!isFacingRight) Flip();
         }
         updateFeetOn(FloorType.None);
