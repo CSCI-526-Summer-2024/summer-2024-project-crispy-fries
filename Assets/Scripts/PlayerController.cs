@@ -477,7 +477,7 @@ public class PlayerController : MonoBehaviour
         // Concave transition
         if(isGrounded)
         {
-            newX = transform.position.x + (isFacingRight? 1:-1)*shadowDiveScale/2;
+            newX = transform.position.x;
             newY = Mathf.Round(transform.position.y - shadowDiveScale/2) + shadowDiveScale/2 + positionOffset;
         }
         // Convex transition
@@ -565,8 +565,8 @@ public class PlayerController : MonoBehaviour
         // Concave transition
         if(isGrounded)
         {
-            newX = transform.position.x + (isFacingRight? 1:-1)*shadowDiveScale/2;
-            newY = Mathf.Round(transform.position.y - shadowDiveScale/2) + shadowDiveScale/2 + positionOffset;
+            newX = transform.position.x;
+            newY = Mathf.Round(transform.position.y + shadowDiveScale/2) - shadowDiveScale/2;
         }
         // Convex transition
         else
@@ -592,7 +592,7 @@ public class PlayerController : MonoBehaviour
     void CheckIfGrounded()
     {
         //TODO: Change front ground check to raycast 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, tileLayer) || Physics2D.OverlapCircle(frontGroundCheck.position, checkRadius, tileLayer);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, tileLayer) || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer);
     }
 
     void CheckIfWalled()
