@@ -138,6 +138,9 @@ public class SpotLightController : MonoBehaviour
         Vector2 direction = point - spotlightPosition;
 
         // Check if the point is within the spotlight's radius
+        if (isLightOn) {
+            return false;
+        }
         if (direction.magnitude > radius)
         {
             return false;

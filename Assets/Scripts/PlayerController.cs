@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     private int randomId;
     private int[] lightShadowData;
 
+    private int[] lightOfftime;
 
     void Start()
     {
@@ -80,7 +81,19 @@ public class PlayerController : MonoBehaviour
         isFacingRight = true;
         feetOn = FloorType.Ground;
         playerSizeShadow = new Vector2(shadowDiveScale, shadowDiveScale);
+
         lightShadowData = new int[gameManager.spotLightManager.getSpotLightArray().Length];
+        for (int i = 0; i < lightShadowData.Length; i++)
+        {
+            lightShadowData[i] = 0;
+        }
+        lightOfftime = new int[gameManager.spotLightManager.getSpotLightArray().Length];
+        for (int i = 0; i < lightOfftime.Length; i++)
+        {
+            lightOfftime[i] = 0;
+        }
+
+
         sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         randomId = UnityEngine.Random.Range(100000, 999999);
 
@@ -608,6 +621,14 @@ public class PlayerController : MonoBehaviour
         {
             GameObject light = lights[i];
             bool count = false;
+
+            if (!light.GetComponent<SpotLightController>().IsLightOn)
+            {
+                lightOfftime[i]++;
+            }
+
+            
+
             foreach (Vector2 corner in corners)
             {
                 if(light.GetComponent<SpotLightController>().DoesIlluminate(corner, tileLayer))
@@ -615,11 +636,12 @@ public class PlayerController : MonoBehaviour
                     Die();
                     
                     return;
-                } else if (!count && light.GetComponent<SpotLightController>().IfInTheShadow(corner, tileLayer)){
+                } else if (!count & light.GetComponent<SpotLightController>().IfInTheShadow(corner, tileLayer)){
                     lightShadowData[i]++;
                     count = true;
                 }
             }
+            // Debug.Log($"Light {i}: Offtime = {lightOfftime[i]}, ShadowData = {lightShadowData[i]}");
         }
     }
 
@@ -655,10 +677,18 @@ public class PlayerController : MonoBehaviour
         FormFieldForLight[1] = "entry.1443173421";
         FormFieldForLight[2] = "entry.1597942742";
         FormFieldForLight[3] = "entry.2028998425";
+
+        String[] FormFieldForTotalLightOff = new String[4];
+        FormFieldForTotalLightOff[0] = "entry.423518393";
+        FormFieldForTotalLightOff[1] = "entry.1390432814";
+        FormFieldForTotalLightOff[2] = "entry.1780117184";
+        FormFieldForTotalLightOff[3] = "entry.350910402";
+
         for (int i = 0; i< light.Length; i++)
         {
-            form.AddField(FormFieldForLight[i], ((byte)light[i]).ToString());
-            Debug.Log("Light " + i + " : " + light[i]);
+            form.AddField(FormFieldForLight[i], light[i].ToString());
+            form.AddField(FormFieldForTotalLightOff[i], lightOfftime[i].ToString());
+            
         }
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
         {
