@@ -2,19 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class LevelSelector : MonoBehaviour
 {
 
-    public int level;  
+    [SerializeField] private string sceneName;  
+    public TMP_Text levelText;
     // Start is called before the first frame update
     void Start()
     {
-        
+        levelText.text = sceneName;
     }
 
     public void OpenScene()
     {
-        SceneManager.LoadScene("Level " + level.ToString());
+        SceneManager.LoadScene(sceneName);
     }
 }

@@ -718,17 +718,21 @@ PrefabInstance:
       propertyPath: level
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 618439088355204909, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
+      propertyPath: sceneName
+      value: BaseLevel
+      objectReference: {fileID: 0}
     - target: {fileID: 5384271021324715680, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_Name
-      value: LevelSelector 3
+      value: LevelSelector (3)
       objectReference: {fileID: 0}
     - target: {fileID: 7324632123473708369, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_Name
-      value: Level 3
+      value: Button
       objectReference: {fileID: 0}
     - target: {fileID: 7353536927926951646, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_text
-      value: 'Level 3
+      value: 'Button
 
 '
       objectReference: {fileID: 0}
@@ -834,19 +838,21 @@ PrefabInstance:
       propertyPath: level
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 618439088355204909, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
+      propertyPath: sceneName
+      value: Tutorial 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5384271021324715680, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_Name
-      value: LevelSelector 2
+      value: LevelSelector (2)
       objectReference: {fileID: 0}
     - target: {fileID: 7324632123473708369, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_Name
-      value: Level 2
+      value: Button
       objectReference: {fileID: 0}
     - target: {fileID: 7353536927926951646, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_text
-      value: 'Level 2
-
-'
+      value: Button
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1081,9 +1087,23 @@ PrefabInstance:
       propertyPath: level
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 618439088355204909, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
+      propertyPath: sceneName
+      value: Tutorial 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5384271021324715680, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
       propertyPath: m_Name
-      value: LevelSelector 1
+      value: LevelSelector
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324632123473708369, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
+      propertyPath: m_Name
+      value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 7353536927926951646, guid: b3c9a1519dfc9174ab36273ccb3009e0, type: 3}
+      propertyPath: m_text
+      value: 'Button
+
+'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -6,21 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Level 2 Old.unity
+    path: Assets/Scenes/Deprecated Scenes/Level 2 Old.unity
     guid: 5692bc4b5b589b943981921560b3c13d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level 1.unity
     guid: e76b7edbbd2c548909ffbd949d01fddc
   - enabled: 1
-    path: Assets/Scenes/Level 2 Old.unity
+    path: Assets/Scenes/Deprecated Scenes/Level 2 Old.unity
     guid: 5692bc4b5b589b943981921560b3c13d
   - enabled: 1
-    path: Assets/Scenes/Level 2.unity
+    path: Assets/Scenes/Deprecated Scenes/Level 2 (Unused).unity
     guid: aa3b52fa642ce4e35a4f4f6f94fb951d
   - enabled: 1
     path: Assets/Scenes/Level Selection.unity
     guid: 96d854c8f84a89442be403fb46219921
   - enabled: 1
-    path: Assets/Scenes/Level 3.unity
+    path: Assets/Scenes/Tutorial 2.unity
     guid: 9bcf4b550b7bf441cbc96d8e4e912010
+  - enabled: 1
+    path: Assets/Scenes/Tutorial 1.unity
+    guid: 5d7ab67c51e9a4bfc976c33f4768aa2d
+  - enabled: 1
+    path: Assets/Scenes/BaseLevel.unity
+    guid: 98835e51dac2545d4a2c64559a7faf3f
   m_configObjects: {}
