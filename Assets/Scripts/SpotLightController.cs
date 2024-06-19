@@ -14,6 +14,8 @@ public class SpotLightController : MonoBehaviour
     [SerializeField]
     private int disabledTime;
 
+    public bool isToggleable;
+
     [SerializeField]
     private GameObject leftFlapPivot;
     [SerializeField]
@@ -23,7 +25,7 @@ public class SpotLightController : MonoBehaviour
     private SpriteRenderer bulbRenderer;
 
     [SerializeField]
-    private TextMeshPro countdownText;
+    private GameObject timerProgress;
     private Coroutine countdownCoroutine;
     
 
@@ -63,8 +65,7 @@ public class SpotLightController : MonoBehaviour
     // Only to be used by player script as this manages timer related co-routines. Other places use IsLightOn
     public void toggleLightOff()
     {
-
-        IsLightOn = false;
+        if(!isToggleable) return;
         if (countdownCoroutine != null)
         {
             StopCoroutine(countdownCoroutine);
@@ -73,16 +74,18 @@ public class SpotLightController : MonoBehaviour
     }
     public void toggleLightOn()
     {
-
+        if(!isToggleable) return;
         IsLightOn = true;
+        timerProgress.transform.Find("TimerBarMaskPivot").localEulerAngles = new Vector3(0, 0, 0);;
+        timerProgress.GetComponentInChildren<SpriteRenderer>().color = Color.green;
         if (countdownCoroutine != null)
         {
             StopCoroutine(countdownCoroutine);
         }
-        countdownText.text="";
     }
     public void toggleLight()
     {
+        if(!isToggleable) return;
         if(IsLightOn)
         {
             toggleLightOff();
@@ -186,6 +189,8 @@ public class SpotLightController : MonoBehaviour
         baseLight.pointLightOuterAngle = angle;
         baseLight.pointLightInnerAngle = angle;
 
+        if(!isToggleable) timerProgress.SetActive(false);
+        else timerProgress.SetActive(true);
         PositionFlaps();
 
         // Force the editor to update
@@ -213,22 +218,34 @@ public class SpotLightController : MonoBehaviour
 
     private IEnumerator CountdownCoroutine()
     {
-        int timer = Mathf.RoundToInt(disabledTime); // Round the duration to the nearest integer
+        IsLightOn = false;
+        float timer = disabledTime; // Set the timer to the full duration
+        float startRotation = 180f;
+        float endRotation = 0f;
+        Transform spriteMaskPivot = timerProgress.transform.Find("TimerBarMaskPivot");
+        SpriteRenderer timerBarSprite = timerProgress.GetComponentInChildren<SpriteRenderer>();
+        timerBarSprite.color = Color.yellow;
 
         while (timer > 0)
         {
-            // Update countdown text
-            countdownText.text = timer.ToString();
 
-            // Wait for a second
-            yield return new WaitForSeconds(1f);
+            // Calculate and set the current rotation of the mask
+            float t = (disabledTime - timer) / disabledTime;
+            float currentRotation = Mathf.Lerp(startRotation, endRotation, t);
+            spriteMaskPivot.transform.localEulerAngles = new Vector3(0, 0, currentRotation);
 
-            // Decrease timer
-            timer--;
+            // Wait for the next frame
+            yield return null;
+
+            // Decrease timer by the time elapsed since the last frame
+            timer -= Time.deltaTime;
         }
 
+        // Ensure the mask is fully rotated at the end
+        spriteMaskPivot.transform.localEulerAngles = new Vector3(0, 0, endRotation);
+        
+        timerBarSprite.color = Color.green;
         IsLightOn = true;
-        countdownText.text = "";
         countdownCoroutine = null;
     }
 
