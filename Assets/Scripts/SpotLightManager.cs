@@ -58,7 +58,7 @@ public class SpotLightManager : MonoBehaviour
             setTargetPosition();
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             ToggleSelectedLight();
         }
