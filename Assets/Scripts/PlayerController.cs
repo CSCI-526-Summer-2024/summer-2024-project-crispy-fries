@@ -74,6 +74,10 @@ public class PlayerController : MonoBehaviour
 
     private int[] lightOfftime;
 
+    private float shadowTime;
+    private float normalTime;
+    private CheckpointManager checkpointManager;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -82,6 +86,8 @@ public class PlayerController : MonoBehaviour
         feetOn = FloorType.Ground;
         playerSizeShadow = new Vector2(shadowDiveScale, shadowDiveScale);
 
+        normalTime = 0;
+        shadowTime = 0;
         lightShadowData = new int[gameManager.spotLightManager.getSpotLightArray().Length];
         for (int i = 0; i < lightShadowData.Length; i++)
         {
@@ -97,6 +103,7 @@ public class PlayerController : MonoBehaviour
         sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         randomId = UnityEngine.Random.Range(100000, 999999);
 
+        checkpointManager = FindObjectOfType<CheckpointManager>();
     }
 
     void Update()
@@ -115,6 +122,14 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         verticalSpeed = rb.velocity.y;
+        if (state == PlayerState.Normal)
+        {
+            normalTime += Time.deltaTime;
+        }
+        else if (state == PlayerState.ShadowDive)
+        {
+            shadowTime += Time.deltaTime;
+        }
     }
 
     
@@ -436,9 +451,9 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    void Die()
+    void Die(int lightNumber)
     {
-        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData, true));
+        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData, true, lightNumber));
         state = PlayerState.Dead;
         rb.velocity = Vector2.zero;
         gameManager.levelManager.Restart();
@@ -447,7 +462,7 @@ public class PlayerController : MonoBehaviour
 
     public void Win()
     {
-        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData, false));
+        StartCoroutine(Post(randomId.ToString(), sceneIndex.ToString(), lightShadowData, false, -1));
         state = PlayerState.Win;
         rb.velocity = Vector2.zero;
     }
@@ -633,7 +648,7 @@ public class PlayerController : MonoBehaviour
             {
                 if(light.GetComponent<SpotLightController>().DoesIlluminate(corner, tileLayer))
                 {
-                    Die();
+                    Die(i);
                     
                     return;
                 } else if (!count & light.GetComponent<SpotLightController>().IfInTheShadow(corner, tileLayer)){
@@ -662,16 +677,23 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private IEnumerator Post(string randomId, string sceneIndex, int[] light, bool isDead)
+    private IEnumerator Post(string randomId, string sceneIndex, int[] light, bool isDead, int lightnumber)
     {
         WWWForm form = new WWWForm();
         form.AddField("entry.1662667842", randomId);
         form.AddField("entry.1637880345", sceneIndex);
+        List<string> allPassedCheckpoints = checkpointManager.GetPassedCheckpoints();
+        form.AddField("entry.914675467", string.Join(",",allPassedCheckpoints));
+
+        form.AddField("entry.294605545", shadowTime.ToString());
+
+        form.AddField("entry.769393169", normalTime.ToString());
         string productName = gameManager.buildName;
         string version = Application.version;  
         string buildName = productName + "_" + version;
         form.AddField("entry.754931394", buildName);
         form.AddField("entry.1060833998", isDead ? "Dead":"Win");
+        form.AddField("entry.1838356757", lightnumber.ToString());
         String[] FormFieldForLight = new String[4];
         FormFieldForLight[0] = "entry.1465073703";
         FormFieldForLight[1] = "entry.1443173421";
@@ -683,6 +705,8 @@ public class PlayerController : MonoBehaviour
         FormFieldForTotalLightOff[1] = "entry.1390432814";
         FormFieldForTotalLightOff[2] = "entry.1780117184";
         FormFieldForTotalLightOff[3] = "entry.350910402";
+
+
 
         for (int i = 0; i< light.Length; i++)
         {
