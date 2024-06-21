@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
         if(feetOn == FloorType.None)
         {
             // need vertical velocity below some value so it doesnt get triggered immediately after jumping
-            if(isGrounded && rb.velocity.y<=0)
+            if(isGrounded && rb.velocity.y<=0.1)
             {
                 updateFeetOn(FloorType.Ground);
             }
