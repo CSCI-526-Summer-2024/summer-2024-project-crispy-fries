@@ -162,7 +162,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded && feetOn == FloorType.Ground)
+        if (Input.GetKeyDown(KeyCode.S) && isGrounded && feetOn == FloorType.Ground)
         {
             SetStateShadowDive();
         }
@@ -348,7 +348,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if (Input.GetKeyDown(KeyCode.UpArrow) && canTransformToNormal())
+        if (Input.GetKeyDown(KeyCode.W) && canTransformToNormal())
         {
             SetStateNormal();
             return;
