@@ -111,7 +111,7 @@ public class SpotLightController : MonoBehaviour
         }
     }
 
-    public bool DoesIlluminate(Vector2 point, LayerMask obstacleLayer)
+    public bool DoesIlluminate(Vector2 point)
     {
         // If light is off, return false
         if(!IsLightOn)
@@ -136,19 +136,27 @@ public class SpotLightController : MonoBehaviour
         {
             return false;
         }
+
         // Cast a ray from the spotlight towards the point with the spotlight's radius as the maximum distance
-        RaycastHit2D hit = Physics2D.Raycast(spotlightPosition, direction, radius, obstacleLayer);
-        if (hit.collider != null && hit.distance < direction.magnitude)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(spotlightPosition, direction, radius);
+        foreach (RaycastHit2D hit in hits)
         {
-            Debug.Log("Obstructed");
-            return false; // Point is obstructed, not illuminated
+            if (hit.collider != null && hit.distance < direction.magnitude)
+            {
+                // Check if the hit object has the "BlocksLight" tag
+                if (hit.collider.CompareTag("BlocksLight"))
+                {
+                    Debug.Log("Obstructed by " + hit.collider.name);
+                    return false; // Point is obstructed, not illuminated
+                }
+            }
         }
         return true; 
 
     }
 
 
-        public bool IfInTheShadow(Vector2 point, LayerMask obstacleLayer)
+        public bool IfInTheShadow(Vector2 point)
     {
         // If light is off, return false
         Vector2 spotlightPosition = transform.position;
@@ -172,12 +180,20 @@ public class SpotLightController : MonoBehaviour
         {
             return false;
         }
+
         // Cast a ray from the spotlight towards the point with the spotlight's radius as the maximum distance
-        RaycastHit2D hit = Physics2D.Raycast(spotlightPosition, direction, radius, obstacleLayer);
-        if (hit.collider != null && hit.distance < direction.magnitude)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(spotlightPosition, direction, radius);
+        foreach (RaycastHit2D hit in hits)
         {
-            Debug.Log("Obstructed");
-            return false; // Point is obstructed, not illuminated
+            if (hit.collider != null && hit.distance < direction.magnitude)
+            {
+                // Check if the hit object has the "BlocksLight" tag
+                if (hit.collider.CompareTag("BlocksLight"))
+                {
+                    Debug.Log("Obstructed by " + hit.collider.name);
+                    return false; // Point is obstructed, not illuminated
+                }
+            }
         }
         return true; 
 

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2656453700059468262}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: MovingCloud
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,9 +43,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6942085862772694402}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Pos A
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,9 +76,9 @@ GameObject:
   - component: {fileID: 347466215534763644}
   - component: {fileID: 6610158507091592145}
   - component: {fileID: 5469865817142312709}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Circle
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -196,9 +196,9 @@ GameObject:
   - component: {fileID: 3851722421488525976}
   - component: {fileID: 1716924888538143473}
   - component: {fileID: 8232362657011464453}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Circle (5)
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -316,9 +316,9 @@ GameObject:
   - component: {fileID: 2674058797484289150}
   - component: {fileID: 4606181175573142392}
   - component: {fileID: 2425984208003655519}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Circle (2)
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,9 +436,9 @@ GameObject:
   - component: {fileID: 5324137590677345600}
   - component: {fileID: 5162628028366693286}
   - component: {fileID: 1936860456443220187}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Circle (1)
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -556,9 +556,9 @@ GameObject:
   - component: {fileID: 6370734641789035000}
   - component: {fileID: 3021554078660165640}
   - component: {fileID: 7371694296714508946}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cloud
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -647,7 +647,7 @@ MonoBehaviour:
   - {x: -0.90013504, y: -0.65706396, z: -0.00000011920929}
   m_ShapePathHash: 1417328047
   m_Mesh: {fileID: 0}
-  m_InstanceId: 31794
+  m_InstanceId: 78900
   m_LocalBounds:
     m_Center: {x: -0.12742043, y: -0.021999002, z: 0}
     m_Extent: {x: 1.4703465, y: 0.84153926, z: 0}
@@ -677,9 +677,9 @@ GameObject:
   - component: {fileID: 4254283056624377066}
   - component: {fileID: 6137497813603702469}
   - component: {fileID: 4002054780901299657}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Circle (4)
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -795,9 +795,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3892487341219975186}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Pos B
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -828,9 +828,9 @@ GameObject:
   - component: {fileID: 7827897489098321054}
   - component: {fileID: 7478574523628345080}
   - component: {fileID: 991293026344570555}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Circle (3)
-  m_TagString: Untagged
+  m_TagString: BlocksLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

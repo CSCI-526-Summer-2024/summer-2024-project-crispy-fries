@@ -653,7 +653,7 @@ public class PlayerController : MonoBehaviour
 
             foreach (Vector2 corner in corners)
             {
-                if(spotLightController.DoesIlluminate(corner, tileLayer))
+                if(spotLightController.DoesIlluminate(corner))
                 {
                     Color lightColor = spotLightController.GetLightColor();
                     totalR += lightColor.r * 255f;
@@ -669,7 +669,7 @@ public class PlayerController : MonoBehaviour
 
                     break;
 
-                } else if (!count & spotLightController.IfInTheShadow(corner, tileLayer)){
+                } else if (!count & spotLightController.IfInTheShadow(corner)){
                     lightShadowData[i]++;
                     count = true;
                 }
