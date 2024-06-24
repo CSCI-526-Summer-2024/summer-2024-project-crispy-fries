@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -9,6 +10,7 @@ public class SpotLightController : MonoBehaviour
     public Light2D baseLight;
     public float radius;
     public float angle;
+    public string lightColorHex = "#FFFFFF";
 
     private bool isLightOn = true;
     [SerializeField]
@@ -28,7 +30,19 @@ public class SpotLightController : MonoBehaviour
     private GameObject timerProgress;
     private Coroutine countdownCoroutine;
     
-
+    public string LightColorHex
+    {
+        get { return lightColorHex; }
+        set
+        {
+            lightColorHex = value;
+            UpdateSpotLightProperties();
+        }
+    }
+    public Color GetLightColor()
+    {
+        return baseLight.color;
+    }
 
     public float Radius
     {
@@ -189,7 +203,17 @@ public class SpotLightController : MonoBehaviour
         baseLight.pointLightOuterAngle = angle;
         baseLight.pointLightInnerAngle = angle;
 
-        if(!isToggleable) timerProgress.SetActive(false);
+        Color color;
+        if (ColorUtility.TryParseHtmlString(lightColorHex, out color))
+        {
+            baseLight.color = color;
+        }
+        else
+        {
+            baseLight.color = Color.white;
+        }
+
+        if (!isToggleable) timerProgress.SetActive(false);
         else timerProgress.SetActive(true);
         PositionFlaps();
 
