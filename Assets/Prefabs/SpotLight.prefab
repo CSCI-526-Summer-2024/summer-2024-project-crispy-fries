@@ -618,6 +618,8 @@ MonoBehaviour:
   rightFlapPivot: {fileID: 3302538469659837291}
   bulbRenderer: {fileID: 5612869063410356524}
   timerProgress: {fileID: 4867438297068164474}
+  rotationAngleFrom: 0
+  rotationAngleTo: 0
 --- !u!212 &5612869063410356524
 SpriteRenderer:
   m_ObjectHideFlags: 0
