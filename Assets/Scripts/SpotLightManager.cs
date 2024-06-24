@@ -6,7 +6,6 @@ using System.Linq;
 public class SpotLightManager : MonoBehaviour
 {
 
-    [SerializeField]
     private GameObject[] spotLightArray;
 
     private List<GameObject> toggleableLights = new List<GameObject>();
@@ -20,6 +19,8 @@ public class SpotLightManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        spotLightArray = FindObjectsOfType<SpotLightController>().Select(controller => controller.gameObject).ToArray();
+
         foreach (GameObject spotlight in spotLightArray)
         {
             SpotLightController controller = spotlight.GetComponent<SpotLightController>();
