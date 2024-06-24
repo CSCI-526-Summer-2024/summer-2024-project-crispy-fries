@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Networking;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
@@ -77,6 +78,9 @@ public class PlayerController : MonoBehaviour
     private float shadowTime;
     private float normalTime;
     private CheckpointManager checkpointManager;
+    private bool onMovingPlatform = false;
+
+    private Rigidbody2D addVelocityRb = null;
 
     void Start()
     {
@@ -106,8 +110,13 @@ public class PlayerController : MonoBehaviour
         checkpointManager = FindObjectOfType<CheckpointManager>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        if(addVelocityRb != null)
+        {
+            Debug.Log("adding"+ addVelocityRb.velocity.x);
+            rb.velocity = rb.velocity + addVelocityRb.velocity;
+        }
         switch (state)
         {
             case PlayerState.Normal:
@@ -153,7 +162,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Move horizontal
-        Vector2 targetVelocity = new Vector2(move * normalSpeed, rb.velocity.y);
+        Vector2 targetVelocity = new Vector2(move * normalSpeed, rb.velocity.y) + (addVelocityRb?addVelocityRb.velocity: Vector2.zero);
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
 
 
@@ -320,28 +329,28 @@ public class PlayerController : MonoBehaviour
         // TODO/Discuss: Slow movement in air
         if(feetOn == FloorType.None)
         {
-            Vector2 targetVelocity = new Vector2(move * shadowDiveSpeed, rb.velocity.y);
+            Vector2 targetVelocity = new Vector2(move * shadowDiveSpeed, rb.velocity.y) + (addVelocityRb?addVelocityRb.velocity: Vector2.zero);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.02f);
         }
         else if(feetOn == FloorType.Ground)
         {
-            Vector2 targetVelocity = new Vector2(move * shadowDiveSpeed, rb.velocity.y);
+            Vector2 targetVelocity = new Vector2(move * shadowDiveSpeed, rb.velocity.y) + (addVelocityRb?addVelocityRb.velocity: Vector2.zero);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
         }
         else if(feetOn == FloorType.RightWall)
         {
-            Vector2 targetVelocity = new Vector2(rb.velocity.x,move * shadowDiveSpeed);
+            Vector2 targetVelocity = new Vector2(rb.velocity.x, move * shadowDiveSpeed) + (addVelocityRb?addVelocityRb.velocity: Vector2.zero);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
         }
         else if(feetOn == FloorType.LeftWall)
         {
-            Vector2 targetVelocity = new Vector2(rb.velocity.x,-move * shadowDiveSpeed);
+            Vector2 targetVelocity = new Vector2(rb.velocity.x, -move * shadowDiveSpeed) + (addVelocityRb?addVelocityRb.velocity: Vector2.zero);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
         }
         else if(feetOn == FloorType.Ceiling)
         {
             //Discuss: Inverted movement on ceiling or not
-            Vector2 targetVelocity = new Vector2(-move * shadowDiveSpeed, rb.velocity.y);
+            Vector2 targetVelocity = new Vector2(-move * shadowDiveSpeed, rb.velocity.y) + (addVelocityRb?addVelocityRb.velocity: Vector2.zero);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
         }
         
@@ -355,14 +364,14 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if(isGrounded)
-        {
-            rb.gravityScale = 0;
-        }
-        else
-        {
-            rb.gravityScale = 3;
-        }
+        // if(isGrounded)
+        // {
+        //     rb.gravityScale = 0;
+        // }
+        // else
+        // {
+        //     rb.gravityScale = 3;
+        // }
 
     }
     // On jumping
@@ -427,7 +436,7 @@ public class PlayerController : MonoBehaviour
     void SetStateNormal()
     {
         state = PlayerState.Normal;
-        rb.gravityScale = 3;
+        // rb.gravityScale = 3;
 
         spriteRenderer.sprite = normalSprite;
         transform.localScale = new Vector3(playerSizeNormal.x * (isFacingRight? 1: -1),playerSizeNormal.y,1);
@@ -442,7 +451,7 @@ public class PlayerController : MonoBehaviour
     void SetStateShadowDive()
     {
         state = PlayerState.ShadowDive;
-        rb.gravityScale = 0;
+        // rb.gravityScale = 0;
 
         spriteRenderer.sprite = shadowDiveSprite;
         transform.localScale = new Vector3(playerSizeShadow.x * (isFacingRight? 1: -1),playerSizeShadow.y,1);
@@ -473,18 +482,23 @@ public class PlayerController : MonoBehaviour
         if(feetOn == FloorType.None || feetOn == FloorType.Ground)
         {
             transform.eulerAngles = new Vector3(0,0,0);
+            Physics2D.gravity = Vector2.down;
         }
         else if (feetOn == FloorType.RightWall)
         {
             transform.eulerAngles = new Vector3(0,0,90);
+            Physics2D.gravity = Vector2.right;
         }
         else if(feetOn == FloorType.LeftWall)
         {
             transform.eulerAngles = new Vector3(0,0,-90);
+            Physics2D.gravity = Vector2.left;
+
         }
         else
         {
             transform.eulerAngles = new Vector3(0,0,180);
+            Physics2D.gravity = Vector2.up;
         }
     }
 
@@ -505,8 +519,8 @@ public class PlayerController : MonoBehaviour
         // Concave transition
         if(isGrounded)
         {
-            newX = transform.position.x;
-            newY = Mathf.Round(transform.position.y - shadowDiveScale/2) + shadowDiveScale/2 + positionOffset;
+            // newX = transform.position.x;
+            // newY = Mathf.Round(transform.position.y - shadowDiveScale/2) + shadowDiveScale/2 + positionOffset;
         }
         // Convex transition
         else
@@ -520,7 +534,8 @@ public class PlayerController : MonoBehaviour
                 newX = transform.position.x + shadowDiveScale/2;
 
             }
-            newY = Mathf.Round(transform.position.y) + shadowDiveScale/2 + positionOffset;
+            // newY = Mathf.Round(transform.position.y) + shadowDiveScale/2 + positionOffset;
+            newY = transform.position.y + shadowDiveScale/2 - checkRadius;
         }
 
         transform.position = new Vector2(newX, newY);
@@ -535,8 +550,8 @@ public class PlayerController : MonoBehaviour
         // Covcave Transition
         if(isGrounded)
         {
-            newX = Mathf.Round(transform.position.x + shadowDiveScale/2) - shadowDiveScale/2;
-            newY = transform.position.y;
+            // newX = Mathf.Round(transform.position.x + shadowDiveScale/2) - shadowDiveScale/2;
+            // newY = transform.position.y;
         }
         // Convex Transition
         else
@@ -549,7 +564,7 @@ public class PlayerController : MonoBehaviour
             {
                 newY = transform.position.y + shadowDiveScale/2;
             }
-            newX = Mathf.Round(transform.position.x) - shadowDiveScale/2;
+            newX = transform.position.x - shadowDiveScale/2 + checkRadius/2;
         }
 
         transform.position = new Vector2(newX, newY);
@@ -563,8 +578,8 @@ public class PlayerController : MonoBehaviour
         // Covcave Transition
         if(isGrounded)
         {
-            newX = Mathf.Round(transform.position.x - shadowDiveScale/2) + shadowDiveScale/2;
-            newY = transform.position.y;
+            // newX = Mathf.Round(transform.position.x - shadowDiveScale/2) + shadowDiveScale/2;
+            // newY = transform.position.y;
         }
         // Convex Transition
         else
@@ -577,7 +592,7 @@ public class PlayerController : MonoBehaviour
             {
                 newY = transform.position.y + shadowDiveScale/2;
             }
-            newX = Mathf.Round(transform.position.x) + shadowDiveScale/2;
+            newX = transform.position.x + shadowDiveScale/2 - checkRadius/2;
         }
 
         transform.position = new Vector2(newX, newY);
@@ -593,8 +608,8 @@ public class PlayerController : MonoBehaviour
         // Concave transition
         if(isGrounded)
         {
-            newX = transform.position.x;
-            newY = Mathf.Round(transform.position.y + shadowDiveScale/2) - shadowDiveScale/2;
+            // newX = transform.position.x;
+            // newY = Mathf.Round(transform.position.y + shadowDiveScale/2) - shadowDiveScale/2;
         }
         // Convex transition
         else
@@ -608,7 +623,7 @@ public class PlayerController : MonoBehaviour
                 newX = transform.position.x + shadowDiveScale/2;
 
             }
-            newY = Mathf.Round(transform.position.y) - shadowDiveScale/2 + positionOffset;
+            newY = transform.position.y - shadowDiveScale/2 + checkRadius/2;
         }
 
         transform.position = new Vector2(newX, newY);
@@ -620,7 +635,23 @@ public class PlayerController : MonoBehaviour
     void CheckIfGrounded()
     {
         //TODO: Change front ground check to raycast 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, tileLayer) || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer);
+        Collider2D circleHit=Physics2D.OverlapCircle(groundCheck.position, checkRadius, tileLayer);
+
+        if(!onMovingPlatform && circleHit && circleHit.CompareTag("MovingPlatform"))
+        {
+            Debug.Log("parent");
+            onMovingPlatform = true;
+            addVelocityRb = circleHit.attachedRigidbody;
+            // transform.SetParent(circleHit.transform.parent);
+        }
+        else if(onMovingPlatform && (!circleHit || circleHit.CompareTag("Solid")))
+        {
+            Debug.Log("unparent");
+            onMovingPlatform = false;
+            addVelocityRb = null;
+            // transform.SetParent(null);
+        }
+        isGrounded = circleHit || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer);
     }
 
     void CheckIfWalled()
