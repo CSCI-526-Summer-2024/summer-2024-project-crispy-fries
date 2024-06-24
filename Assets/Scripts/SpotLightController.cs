@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -9,6 +10,7 @@ public class SpotLightController : MonoBehaviour
     public Light2D baseLight;
     public float radius;
     public float angle;
+    public string lightColorHex = "#FFFFFF";
 
     private bool isLightOn = true;
     [SerializeField]
@@ -28,7 +30,19 @@ public class SpotLightController : MonoBehaviour
     private GameObject timerProgress;
     private Coroutine countdownCoroutine;
     
-
+    public string LightColorHex
+    {
+        get { return lightColorHex; }
+        set
+        {
+            lightColorHex = value;
+            UpdateSpotLightProperties();
+        }
+    }
+    public Color GetLightColor()
+    {
+        return baseLight.color;
+    }
 
     public float Radius
     {
@@ -97,7 +111,7 @@ public class SpotLightController : MonoBehaviour
         }
     }
 
-    public bool DoesIlluminate(Vector2 point, LayerMask obstacleLayer)
+    public bool DoesIlluminate(Vector2 point)
     {
         // If light is off, return false
         if(!IsLightOn)
@@ -122,19 +136,27 @@ public class SpotLightController : MonoBehaviour
         {
             return false;
         }
+
         // Cast a ray from the spotlight towards the point with the spotlight's radius as the maximum distance
-        RaycastHit2D hit = Physics2D.Raycast(spotlightPosition, direction, radius, obstacleLayer);
-        if (hit.collider != null && hit.distance < direction.magnitude)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(spotlightPosition, direction, radius);
+        foreach (RaycastHit2D hit in hits)
         {
-            Debug.Log("Obstructed");
-            return false; // Point is obstructed, not illuminated
+            if (hit.collider != null && hit.distance < direction.magnitude)
+            {
+                // Check if the hit object has the "BlocksLight" tag
+                if (hit.collider.CompareTag("BlocksLight"))
+                {
+                    Debug.Log("Obstructed by " + hit.collider.name);
+                    return false; // Point is obstructed, not illuminated
+                }
+            }
         }
         return true; 
 
     }
 
 
-        public bool IfInTheShadow(Vector2 point, LayerMask obstacleLayer)
+        public bool IfInTheShadow(Vector2 point)
     {
         // If light is off, return false
         Vector2 spotlightPosition = transform.position;
@@ -158,12 +180,20 @@ public class SpotLightController : MonoBehaviour
         {
             return false;
         }
+
         // Cast a ray from the spotlight towards the point with the spotlight's radius as the maximum distance
-        RaycastHit2D hit = Physics2D.Raycast(spotlightPosition, direction, radius, obstacleLayer);
-        if (hit.collider != null && hit.distance < direction.magnitude)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(spotlightPosition, direction, radius);
+        foreach (RaycastHit2D hit in hits)
         {
-            Debug.Log("Obstructed");
-            return false; // Point is obstructed, not illuminated
+            if (hit.collider != null && hit.distance < direction.magnitude)
+            {
+                // Check if the hit object has the "BlocksLight" tag
+                if (hit.collider.CompareTag("BlocksLight"))
+                {
+                    Debug.Log("Obstructed by " + hit.collider.name);
+                    return false; // Point is obstructed, not illuminated
+                }
+            }
         }
         return true; 
 
@@ -189,7 +219,17 @@ public class SpotLightController : MonoBehaviour
         baseLight.pointLightOuterAngle = angle;
         baseLight.pointLightInnerAngle = angle;
 
-        if(!isToggleable) timerProgress.SetActive(false);
+        Color color;
+        if (ColorUtility.TryParseHtmlString(lightColorHex, out color))
+        {
+            baseLight.color = color;
+        }
+        else
+        {
+            baseLight.color = Color.white;
+        }
+
+        if (!isToggleable) timerProgress.SetActive(false);
         else timerProgress.SetActive(true);
         PositionFlaps();
 

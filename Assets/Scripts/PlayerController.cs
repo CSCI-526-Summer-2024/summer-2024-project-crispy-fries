@@ -615,7 +615,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, 0);
         updateFeetOn(FloorType.Ceiling);
     }
-    
+
 
     void CheckIfGrounded()
     {
@@ -632,12 +632,19 @@ public class PlayerController : MonoBehaviour
     {
         Vector2[] corners = GetPlayerCorners();
         GameObject[] lights = gameManager.spotLightManager.getSpotLightArray();
+
+        float totalR = 0f;
+        float totalG = 0f;
+        float totalB = 0f;
+
         for (int i = 0; i < lights.Length; i++) 
         {
             GameObject light = lights[i];
             bool count = false;
 
-            if (!light.GetComponent<SpotLightController>().IsLightOn)
+            SpotLightController spotLightController = light.GetComponent<SpotLightController>();
+
+            if (!spotLightController.IsLightOn)
             {
                 lightOfftime[i]++;
             }
@@ -646,12 +653,23 @@ public class PlayerController : MonoBehaviour
 
             foreach (Vector2 corner in corners)
             {
-                if(light.GetComponent<SpotLightController>().DoesIlluminate(corner, tileLayer))
+                if(spotLightController.DoesIlluminate(corner))
                 {
-                    Die(i);
-                    
-                    return;
-                } else if (!count & light.GetComponent<SpotLightController>().IfInTheShadow(corner, tileLayer)){
+                    Color lightColor = spotLightController.GetLightColor();
+                    totalR += lightColor.r * 255f;
+                    totalG += lightColor.g * 255f;
+                    totalB += lightColor.b * 255f;
+                    Debug.Log($"Total RGB: R = {totalR}, G = {totalG}, B = {totalB}");
+
+                    if (totalR >= 255f && totalG >= 255f && totalB >= 255f)
+                    {
+                        Die(i);
+                        return;
+                    }
+
+                    break;
+
+                } else if (!count & spotLightController.IfInTheShadow(corner)){
                     lightShadowData[i]++;
                     count = true;
                 }

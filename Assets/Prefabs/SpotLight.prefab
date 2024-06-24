@@ -611,6 +611,7 @@ MonoBehaviour:
   baseLight: {fileID: 2022556505812805788}
   radius: 7.6
   angle: 55
+  lightColorHex: 
   disabledTime: 0
   isToggleable: 1
   leftFlapPivot: {fileID: 3867856570345299163}
