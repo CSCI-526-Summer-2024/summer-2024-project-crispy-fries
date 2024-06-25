@@ -15,10 +15,13 @@ public class SpotLightManager : MonoBehaviour
     private GameObject selector;
     private Vector3 targetPosition;
 
+    private GameManager gameManager;
+
     
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         spotLightArray = FindObjectsOfType<SpotLightController>().Select(controller => controller.gameObject).ToArray();
 
         foreach (GameObject spotlight in spotLightArray)
@@ -43,7 +46,7 @@ public class SpotLightManager : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Q) && toggleableLightSelectedIndex!=-1)
+        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.Q) && toggleableLightSelectedIndex!=-1)
         {
             toggleableLightSelectedIndex--;
             if (toggleableLightSelectedIndex < 0)
@@ -51,7 +54,7 @@ public class SpotLightManager : MonoBehaviour
             setTargetPosition();
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && toggleableLightSelectedIndex!=-1)
+        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.E) && toggleableLightSelectedIndex!=-1)
         {
             toggleableLightSelectedIndex++;
             if (toggleableLightSelectedIndex >= toggleableLights.Count)
@@ -59,7 +62,7 @@ public class SpotLightManager : MonoBehaviour
             setTargetPosition();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.LeftShift))
         {
             ToggleSelectedLight();
         }

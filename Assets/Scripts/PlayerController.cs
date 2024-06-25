@@ -170,12 +170,12 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
 
 
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space) && feetOn == FloorType.Ground)
+        if (!gameManager.GameIsPaused  && isGrounded && Input.GetKeyDown(KeyCode.Space) && feetOn == FloorType.Ground)
         {
             Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.RegularTile)
+        if (!gameManager.GameIsPaused && Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.RegularTile)
         {
             SetStateShadowDive();
         }
@@ -332,7 +332,7 @@ public class PlayerController : MonoBehaviour
         // All state transitions are handeled, now handle movement
 
         // Handle Jumping
-        if (isGrounded && feetOn!= FloorType.None && Input.GetKeyDown(KeyCode.Space))
+        if (!gameManager.GameIsPaused  && isGrounded && feetOn!= FloorType.None && Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
@@ -368,7 +368,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))&& canTransformToNormal())
+        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))&& canTransformToNormal())
         {
             SetStateNormal();
             return;

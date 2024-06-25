@@ -15,19 +15,22 @@ public class WinMenu : MonoBehaviour
     private string sceneName;
     private int currBuildIndex;
 
-    [SerializeField] private LevelManager levelManager;
-    [SerializeField] private GameObject continueButton;
+    private LevelManager levelManager;
+    [SerializeField] private GameObject nextLevelButton;
     [SerializeField] private TMP_Text winText;
 
-    public static bool LevelIsPaused = false;
     [SerializeField] private GameObject playButton;
     [SerializeField] private GameObject pauseButton;
+
+    [SerializeField] private GameObject resumeButton;
+
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
         WinMenuUI.SetActive(false);
-
+        gameManager = FindObjectOfType<GameManager>();
         Scene currentScene = SceneManager.GetActiveScene();
         currBuildIndex = currentScene.buildIndex;
 
@@ -44,60 +47,65 @@ public class WinMenu : MonoBehaviour
     {
         if (LevelIsComplete)
         {
+            resumeButton.SetActive(false);
             WinMenuUI.SetActive(true);
             if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
                 // Last level
                 Debug.Log("Last Level!");
-                continueButton.SetActive(false);
+                
+                
                 winText.text = "Game Completed! Congrats";
             }
             else {
+                nextLevelButton.SetActive(true);
                 winText.text = "Level Completed!";
             }
         }
         
     }
 
-    public void Resume()
+    public void NextLevel()
     {
         levelManager.LoadNextScene();
         LevelIsComplete = false;
+        gameManager.GameIsPaused = false;
+
     }
 
     public void LoadMenu()
     {
         SceneManager.LoadScene("Level Selection");
         LevelIsComplete = false;
-        LevelIsPaused = false;
+        gameManager.GameIsPaused = false;
+
     }
     public void Restart()
     {
         SceneManager.LoadScene(sceneName);
         LevelIsComplete = false;
-        LevelIsPaused = false;
+        gameManager.GameIsPaused = false;
     }
     public void Pause()
     {
         playButton.SetActive(true);
         pauseButton.SetActive(false);
+        nextLevelButton.SetActive(false);
+        resumeButton.SetActive(true);
 
-        LevelIsPaused = true;
-        Time.timeScale = 0f;
+        gameManager.GameIsPaused = true;
 
+        winText.text = "Paused";
         WinMenuUI.SetActive(true);
 
-        continueButton.SetActive(false);
+        
 
-        winText.text = "Pause";
+       
     }
     public void Play()
     {
         playButton.SetActive(false);
         pauseButton.SetActive(true);
-
-        LevelIsPaused = false;
-        Time.timeScale = 1f;
-
+        gameManager.GameIsPaused = false;
         WinMenuUI.SetActive(false);
     }
 }
