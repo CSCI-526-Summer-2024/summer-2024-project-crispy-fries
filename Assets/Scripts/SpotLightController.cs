@@ -14,7 +14,7 @@ public class SpotLightController : MonoBehaviour
 
     private bool isLightOn = true;
     [SerializeField]
-    private int disabledTime;
+    private float disabledTime;
 
     public bool isToggleable;
 

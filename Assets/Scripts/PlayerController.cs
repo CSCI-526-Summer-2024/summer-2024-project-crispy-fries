@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
         Normal,
         ShadowDive,
         Dead,
-
         Win
     }
 
@@ -27,6 +26,14 @@ public class PlayerController : MonoBehaviour
         Ceiling
     }
 
+        public enum FloorMaterial
+    {
+        None,
+        RegularTile,
+        GlassTile
+
+    }
+
     public PlayerState state = PlayerState.Normal;
     public float normalSpeed = 9f;
     public float shadowDiveSpeed = 6f;
@@ -34,6 +41,8 @@ public class PlayerController : MonoBehaviour
     public float normalJumpForce = 15f;
     public float shadowJumpForce = 5f;
     public LayerMask tileLayer;
+    public LayerMask glassLayer;
+
 
     public GameManager gameManager;
     
@@ -77,6 +86,10 @@ public class PlayerController : MonoBehaviour
     private float shadowTime;
     private float normalTime;
     private CheckpointManager checkpointManager;
+
+    private bool isInLight = false;
+
+    private FloorMaterial floorMaterial;
 
     void Start()
     {
@@ -162,7 +175,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && isGrounded && feetOn == FloorType.Ground)
+        if (Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.RegularTile)
         {
             SetStateShadowDive();
         }
@@ -175,6 +188,13 @@ public class PlayerController : MonoBehaviour
     {
         CheckPlayerDeath();
         if(state == PlayerState.Dead) return;
+        if(isInLight || floorMaterial == FloorMaterial.GlassTile) 
+        {   
+            SetStateNormal();
+            return;
+        }
+
+        
 
         //Get desired move and update all checks before calculating what to do
         float move = Input.GetAxis("Horizontal");
@@ -415,7 +435,7 @@ public class PlayerController : MonoBehaviour
         if(isGrounded && feetOn == FloorType.Ground)
         {
             //Check that there is no platform right above player
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, tileLayer);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, tileLayer | glassLayer);
             if(hit.collider == null)
             {
                 return true;
@@ -432,7 +452,15 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.sprite = normalSprite;
         transform.localScale = new Vector3(playerSizeNormal.x * (isFacingRight? 1: -1),playerSizeNormal.y,1);
         // translate vertically by difference in centers so normal state doesnt end up in ground
-        transform.position += new Vector3(0, (1.9f-0.9f)/2, 0);
+        if(feetOn == FloorType.Ceiling)
+        {
+            transform.position -= new Vector3(0, (1.9f-0.9f)/2, 0);
+        }
+        else
+        {
+            transform.position += new Vector3(0, (1.9f-0.9f)/2, 0);
+        }
+        updateFeetOn(FloorType.None);
         if(!isFacingRight) Flip();
 
 
@@ -619,55 +647,62 @@ public class PlayerController : MonoBehaviour
 
     void CheckIfGrounded()
     {
+        Collider2D circleHit = Physics2D.OverlapCircle(groundCheck.position, checkRadius, tileLayer | glassLayer);
+        if(circleHit)
+        {
+
+            if((1 << circleHit.gameObject.layer) == glassLayer) floorMaterial = FloorMaterial.GlassTile;
+            else if((1 << circleHit.gameObject.layer) == tileLayer) floorMaterial = FloorMaterial.RegularTile;
+        }
+        else
+        {
+            floorMaterial = FloorMaterial.None;
+        }
         //TODO: Change front ground check to raycast 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, tileLayer) || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer);
+        isGrounded = circleHit || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer | glassLayer);
     }
 
     void CheckIfWalled()
     {   
-        isWalled = Physics2D.OverlapCircle(wallCheck.position, checkRadius, tileLayer);
+        isWalled = Physics2D.OverlapCircle(wallCheck.position, checkRadius, tileLayer | glassLayer);
     }
 
     void CheckPlayerDeath()
     {
         Vector2[] corners = GetPlayerCorners();
         GameObject[] lights = gameManager.spotLightManager.getSpotLightArray();
+        isInLight = false;
 
-        float totalR = 0f;
-        float totalG = 0f;
-        float totalB = 0f;
-
-        for (int i = 0; i < lights.Length; i++) 
+        foreach (Vector2 corner in corners)
         {
-            GameObject light = lights[i];
-            bool count = false;
-
-            SpotLightController spotLightController = light.GetComponent<SpotLightController>();
-
-            if (!spotLightController.IsLightOn)
+            float totalR = 0f;
+            float totalG = 0f;
+            float totalB = 0f;
+            for (int i = 0; i < lights.Length; i++) 
             {
-                lightOfftime[i]++;
-            }
+                GameObject light = lights[i];
+                bool count = false;
 
-            
+                SpotLightController spotLightController = light.GetComponent<SpotLightController>();
 
-            foreach (Vector2 corner in corners)
-            {
+                if (!spotLightController.IsLightOn)
+                {
+                    lightOfftime[i]++;
+                }
+
                 if(spotLightController.DoesIlluminate(corner))
                 {
                     Color lightColor = spotLightController.GetLightColor();
                     totalR += lightColor.r * 255f;
                     totalG += lightColor.g * 255f;
                     totalB += lightColor.b * 255f;
-                    Debug.Log($"Total RGB: R = {totalR}, G = {totalG}, B = {totalB}");
+                    isInLight = true;
+                    // Debug.Log($"Total RGB: R = {totalR}, G = {totalG}, B = {totalB}");
 
-                    if (totalR >= 255f && totalG >= 255f && totalB >= 255f)
+                    if (totalR == 255f && totalG == 255f && totalB == 255f)
                     {
                         Die(i);
-                        return;
                     }
-
-                    break;
 
                 } else if (!count & spotLightController.IfInTheShadow(corner)){
                     lightShadowData[i]++;
