@@ -47,10 +47,6 @@ public class WinMenu : MonoBehaviour
     {
 
 
-        if (!LevelIsPaused)
-        {
-            Time.timeScale = 1f;
-        }
         if (LevelIsComplete)
         {
             resumeButton.SetActive(false);
