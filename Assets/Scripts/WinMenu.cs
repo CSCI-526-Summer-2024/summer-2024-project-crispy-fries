@@ -19,6 +19,10 @@ public class WinMenu : MonoBehaviour
     [SerializeField] private GameObject continueButton;
     [SerializeField] private TMP_Text winText;
 
+    public static bool LevelIsPaused = false;
+    [SerializeField] private GameObject playButton;
+    [SerializeField] private GameObject pauseButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +33,9 @@ public class WinMenu : MonoBehaviour
 
         sceneName = currentScene.name;
         levelManager = FindAnyObjectByType<LevelManager>();
+
+        playButton.SetActive(false);
+        pauseButton.SetActive(true);
     }
 
 
@@ -48,7 +55,7 @@ public class WinMenu : MonoBehaviour
                 winText.text = "Level Completed!";
             }
         }
-
+        
     }
 
     public void Resume()
@@ -61,10 +68,36 @@ public class WinMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Level Selection");
         LevelIsComplete = false;
+        LevelIsPaused = false;
     }
     public void Restart()
     {
         SceneManager.LoadScene(sceneName);
         LevelIsComplete = false;
+        LevelIsPaused = false;
+    }
+    public void Pause()
+    {
+        playButton.SetActive(true);
+        pauseButton.SetActive(false);
+
+        LevelIsPaused = true;
+        Time.timeScale = 0f;
+
+        WinMenuUI.SetActive(true);
+
+        continueButton.SetActive(false);
+
+        winText.text = "Pause";
+    }
+    public void Play()
+    {
+        playButton.SetActive(false);
+        pauseButton.SetActive(true);
+
+        LevelIsPaused = false;
+        Time.timeScale = 1f;
+
+        WinMenuUI.SetActive(false);
     }
 }
