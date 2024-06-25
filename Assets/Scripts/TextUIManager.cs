@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class TextUIManager : MonoBehaviour
 {
@@ -70,7 +71,7 @@ public class TextUIManager : MonoBehaviour
     private IEnumerator ShowAndFadeHintCoroutine()
     {   
         hintText.alpha = 1;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         hintText.alpha = 0;
     }
 
