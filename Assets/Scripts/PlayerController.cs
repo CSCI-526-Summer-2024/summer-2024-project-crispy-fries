@@ -368,7 +368,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if (Input.GetKeyDown(KeyCode.W) && canTransformToNormal())
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))&& canTransformToNormal())
         {
             SetStateNormal();
             return;
