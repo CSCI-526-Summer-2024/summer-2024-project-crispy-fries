@@ -45,6 +45,12 @@ public class WinMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+        if (!LevelIsPaused)
+        {
+            Time.timeScale = 1f;
+        }
         if (LevelIsComplete)
         {
             resumeButton.SetActive(false);
