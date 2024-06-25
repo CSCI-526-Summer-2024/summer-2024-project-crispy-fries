@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class TextUIManager : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class TextUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI deathText;
     [SerializeField] private TextMeshProUGUI winText;
     [SerializeField] private TextMeshProUGUI hintText;
+
+    [SerializeField] private TextMeshProUGUI triggeredText;
+
+    [SerializeField] private TextMeshProUGUI triggeredText1;
+    [SerializeField] private TextMeshProUGUI triggeredText2;
 
     private Scene currScene;
 
@@ -34,6 +40,18 @@ public class TextUIManager : MonoBehaviour
         StartCoroutine(ShowAndFadeHintCoroutine());
     }
 
+    public void TriggerText(){
+        StartCoroutine(ShowTriggeredText());
+    }
+
+    public void TriggerText1(){
+        StartCoroutine(ShowTriggeredText1());
+    }
+
+    public void TriggerText2(){
+        StartCoroutine(ShowTriggeredText2());
+    }
+
     public void WinGame(){
         StartCoroutine(WinGameCoroutine());
     }
@@ -47,6 +65,15 @@ public class TextUIManager : MonoBehaviour
         levelText.text = sceneName;
         deathText.alpha = 0f;
         hintText.alpha = 0;
+        if (triggeredText != null) {
+            triggeredText.alpha = 0;
+        }
+        if (triggeredText1 != null) {
+            triggeredText1.alpha = 0;
+        }
+        if (triggeredText2 != null) {
+            triggeredText2.alpha = 0;
+        }
         winText.alpha = 0;
         levelText.alpha = 1f;
         yield return new WaitForSeconds(5);
@@ -70,7 +97,7 @@ public class TextUIManager : MonoBehaviour
     private IEnumerator ShowAndFadeHintCoroutine()
     {   
         hintText.alpha = 1;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
         hintText.alpha = 0;
     }
 
@@ -79,5 +106,37 @@ public class TextUIManager : MonoBehaviour
         winText.alpha = 1f;
         yield return new WaitForSeconds(2);
         SceneManager.LoadScene(0);
+    }
+
+    private IEnumerator ShowTriggeredText()
+    {
+        if (triggeredText == null) {
+            yield break;
+        }
+        triggeredText.alpha = 1f;
+        yield return new WaitForSeconds(10);
+        triggeredText.alpha = 0;
+    }
+
+
+    private IEnumerator ShowTriggeredText1()
+    {
+        if (triggeredText1 == null) {
+            yield break;
+        }
+        hintText.alpha = 0;
+        triggeredText1.alpha = 1f;
+        yield return new WaitForSeconds(10);
+        triggeredText1.alpha = 0;
+    }
+    private IEnumerator ShowTriggeredText2()
+    {
+        if (triggeredText2 == null) {
+            yield break;
+        }
+        triggeredText1.alpha = 0;
+        triggeredText2.alpha = 1f;
+        yield return new WaitForSeconds(10);
+        triggeredText2.alpha = 0;
     }
 }
