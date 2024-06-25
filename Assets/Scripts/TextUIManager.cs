@@ -12,11 +12,15 @@ public class TextUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI deathText;
     [SerializeField] private TextMeshProUGUI winText;
     [SerializeField] private TextMeshProUGUI hintText;
+    [SerializeField] private TextMeshProUGUI hintText2;
 
     [SerializeField] private TextMeshProUGUI triggeredText;
 
     [SerializeField] private TextMeshProUGUI triggeredText1;
     [SerializeField] private TextMeshProUGUI triggeredText2;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GridLayout grid;
+    private bool secondHint;
 
     private Scene currScene;
 
@@ -25,6 +29,14 @@ public class TextUIManager : MonoBehaviour
     {
         ShowAndFadeLevel();
         ShowAndFadeHint();
+        if(player == null) {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+        secondHint = false;
+    }
+    void Update()
+    {
+        ShowSecondHint();
     }
 
     public void ShowAndFadeLevel()
@@ -65,6 +77,7 @@ public class TextUIManager : MonoBehaviour
         levelText.text = sceneName;
         deathText.alpha = 0f;
         hintText.alpha = 0;
+        hintText2.alpha = 0;
         if (triggeredText != null) {
             triggeredText.alpha = 0;
         }
@@ -138,5 +151,25 @@ public class TextUIManager : MonoBehaviour
         triggeredText2.alpha = 1f;
         yield return new WaitForSeconds(10);
         triggeredText2.alpha = 0;
+    }
+
+    public void ShowSecondHint(){
+        Vector3 playerPos = grid.WorldToCell(player.transform.position);
+        Debug.Log(playerPos);
+
+        if (playerPos == new Vector3(-8.0f,-3.0f,0.0f)){
+            StartCoroutine(ShowSecondHintCoroutine());
+        }
+    }
+    private IEnumerator ShowSecondHintCoroutine(){
+        if (secondHint == true){
+            yield break;
+        }
+        Debug.Log("show second hint");
+        hintText.alpha = 0;
+        hintText2.alpha = 1;
+        yield return new WaitForSeconds(8);
+        hintText2.alpha = 0;
+        secondHint = true;
     }
 }
