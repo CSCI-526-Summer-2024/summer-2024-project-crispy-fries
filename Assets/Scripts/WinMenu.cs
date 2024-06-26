@@ -23,6 +23,7 @@ public class WinMenu : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
 
     [SerializeField] private GameObject resumeButton;
+    [SerializeField] private GameObject controlsPage;
 
     private GameManager gameManager;
 
@@ -39,6 +40,7 @@ public class WinMenu : MonoBehaviour
 
         playButton.SetActive(false);
         pauseButton.SetActive(true);
+        controlsPage.SetActive(false);
     }
 
 
@@ -62,6 +64,12 @@ public class WinMenu : MonoBehaviour
                 nextLevelButton.SetActive(true);
                 winText.text = "Level Completed!";
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(gameManager.GameIsPaused) this.Play();
+            else this.Pause();
         }
         
     }
@@ -94,6 +102,7 @@ public class WinMenu : MonoBehaviour
         nextLevelButton.SetActive(false);
         resumeButton.SetActive(true);
 
+
         gameManager.GameIsPaused = true;
 
         winText.text = "Paused";
@@ -108,6 +117,21 @@ public class WinMenu : MonoBehaviour
         playButton.SetActive(false);
         pauseButton.SetActive(true);
         gameManager.GameIsPaused = false;
+        controlsPage.SetActive(false);
         WinMenuUI.SetActive(false);
+    }
+
+    public void ShowControlsPage()
+    {
+        controlsPage.SetActive(true);
+        WinMenuUI.SetActive(false);
+
+
+    }
+    public void ControlsPageBackButton()
+    {
+        controlsPage.SetActive(false);
+        WinMenuUI.SetActive(true);
+        
     }
 }
