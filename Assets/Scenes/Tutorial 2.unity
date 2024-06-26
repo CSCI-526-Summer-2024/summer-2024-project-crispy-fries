@@ -3378,9 +3378,12 @@ MonoBehaviour:
   deathText: {fileID: 1318134521}
   winText: {fileID: 1874163602}
   hintText: {fileID: 423551194}
+  hintText2: {fileID: 0}
   triggeredText: {fileID: 0}
   triggeredText1: {fileID: 823232279}
   triggeredText2: {fileID: 388804215}
+  player: {fileID: 0}
+  grid: {fileID: 0}
 --- !u!4 &732289020
 Transform:
   m_ObjectHideFlags: 0

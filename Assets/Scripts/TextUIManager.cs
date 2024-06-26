@@ -77,6 +77,7 @@ public class TextUIManager : MonoBehaviour
         levelText.text = sceneName;
         deathText.alpha = 0f;
         hintText.alpha = 0;
+        if (hintText2 != null)
         hintText2.alpha = 0;
         if (triggeredText != null) {
             triggeredText.alpha = 0;
@@ -91,6 +92,7 @@ public class TextUIManager : MonoBehaviour
         levelText.alpha = 1f;
         yield return new WaitForSeconds(5);
         levelText.alpha = 0f;
+        winText.alpha = 0;
     }
 
     // Only to be called by ShowAndFadeDeath()
@@ -154,6 +156,9 @@ public class TextUIManager : MonoBehaviour
     }
 
     public void ShowSecondHint(){
+        if (hintText2 == null){
+            return;
+        }
         Vector3 playerPos = grid.WorldToCell(player.transform.position);
         Debug.Log(playerPos);
 

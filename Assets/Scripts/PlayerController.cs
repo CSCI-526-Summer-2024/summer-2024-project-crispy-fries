@@ -747,17 +747,23 @@ public class PlayerController : MonoBehaviour
         form.AddField("entry.754931394", buildName);
         form.AddField("entry.1060833998", isDead ? "Dead":"Win");
         form.AddField("entry.1838356757", lightnumber.ToString());
-        String[] FormFieldForLight = new String[4];
+        String[] FormFieldForLight = new String[6];
         FormFieldForLight[0] = "entry.1465073703";
         FormFieldForLight[1] = "entry.1443173421";
         FormFieldForLight[2] = "entry.1597942742";
         FormFieldForLight[3] = "entry.2028998425";
+        FormFieldForLight[4] = "entry.1300296730";
+        FormFieldForLight[5] = "entry.1418306680";
 
-        String[] FormFieldForTotalLightOff = new String[4];
+
+        String[] FormFieldForTotalLightOff = new String[6];
         FormFieldForTotalLightOff[0] = "entry.423518393";
         FormFieldForTotalLightOff[1] = "entry.1390432814";
         FormFieldForTotalLightOff[2] = "entry.1780117184";
         FormFieldForTotalLightOff[3] = "entry.350910402";
+        FormFieldForTotalLightOff[4] = "entry.2103053765";
+        FormFieldForTotalLightOff[5] = "entry.963713032";
+
 
 
 
