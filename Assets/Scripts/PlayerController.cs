@@ -117,6 +117,7 @@ public class PlayerController : MonoBehaviour
         randomId = UnityEngine.Random.Range(100000, 999999);
 
         checkpointManager = FindObjectOfType<CheckpointManager>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -670,6 +671,9 @@ public class PlayerController : MonoBehaviour
     void CheckPlayerDeath()
     {
         Vector2[] corners = GetPlayerCorners();
+        if (gameManager == null){Debug.Log("gm null");}
+        if (gameManager.spotLightManager == null){Debug.Log("splm null");}
+        if (gameManager.spotLightManager.getSpotLightArray() == null){Debug.Log("spl arr null");}
         GameObject[] lights = gameManager.spotLightManager.getSpotLightArray();
         isInLight = false;
 
