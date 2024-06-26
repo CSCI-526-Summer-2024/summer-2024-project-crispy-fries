@@ -176,8 +176,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   URL: https://docs.google.com/forms/u/0/d/e/1FAIpQLSfOGYgVRRp-6DSuW2OLMH2o6p_P-htPqSgNTqotq8QVgaTIzg/formResponse
   state: 0
-  normalSpeed: 15
-  shadowDiveSpeed: 3
+  normalSpeed: 9
+  shadowDiveSpeed: 6
   normalJumpForce: 15
   shadowJumpForce: 5
   tileLayer:

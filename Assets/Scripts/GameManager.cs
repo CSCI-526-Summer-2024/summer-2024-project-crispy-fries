@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     {
         GameIsPaused = false;
         Application.targetFrameRate = 60;
+        if (player == null) {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
     }
 
     // Update is called once per frame
