@@ -54,7 +54,7 @@ public class WinMenu : MonoBehaviour
             if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
                 // Last level
                 Debug.Log("Last Level!");
-                
+                nextLevelButton.SetActive(false);
                 
                 winText.text = "Game Completed! Congrats";
             }
