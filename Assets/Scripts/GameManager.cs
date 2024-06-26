@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public TextUIManager textUIManager;
     public LevelManager levelManager;
 
-    public string buildName = "Post Alpha Prototype Thursday";
+    public string buildName = " Beta Progress Check ";
 
     public GameObject player;
     
