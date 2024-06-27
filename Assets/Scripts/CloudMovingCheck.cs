@@ -9,7 +9,7 @@ public class CloudMovingCheck : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // checkpointManager.PlayerPassedCheckpoint(gameObject.name);
+            
             platform.startMoving();
         }
     }
