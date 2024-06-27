@@ -9,20 +9,35 @@ EditorBuildSettings:
     path: Assets/Scenes/Level Selection.unity
     guid: 96d854c8f84a89442be403fb46219921
   - enabled: 1
-    path: Assets/Scenes/Levels/Level 2.unity
-    guid: 5d7ab67c51e9a4bfc976c33f4768aa2d
+    path: Assets/Scenes/Tutorials/Tutorial 1.unity
+    guid: 19699755a5b0e4b3b823daf4194ee089
   - enabled: 1
-    path: Assets/Scenes/Levels/Level 1.unity
-    guid: 9bcf4b550b7bf441cbc96d8e4e912010
+    path: Assets/Scenes/Tutorials/Tutorial 2.unity
+    guid: a7d8149666c874ffb827875c5df425cd
   - enabled: 1
-    path: Assets/Scenes/Levels/Level 3.unity
-    guid: b57f4cfcf07212b42904991f06119fdf
+    path: Assets/Scenes/Tutorials/Tutorial 3.unity
+    guid: 76692af5f4cac4127974151838a84351
+  - enabled: 1
+    path: Assets/Scenes/Tutorials/Tutorial 4.unity
+    guid: 32a9ad7dd67234016b846474188459a7
+  - enabled: 1
+    path: Assets/Scenes/Tutorials/Tutorial 5.unity
+    guid: e3cebef75789a43b6878beebf332d687
   - enabled: 1
     path: Assets/Scenes/Tutorials/Tutorial 6.unity
     guid: e621097dc5ceb468f8ba49251d2dd65f
   - enabled: 1
-    path: Assets/Scenes/Deprecated Scenes/Level 2.unity
-    guid: c477c45acd31f4043974394fbaa3f140
+    path: Assets/Scenes/Levels/Level 1.unity
+    guid: 9bcf4b550b7bf441cbc96d8e4e912010
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level 2.unity
+    guid: 5d7ab67c51e9a4bfc976c33f4768aa2d
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level 3.unity
+    guid: b57f4cfcf07212b42904991f06119fdf
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level 4.unity
+    guid: 22b2133e58daf4fc6a1390de86173af6
   - enabled: 1
     path: Assets/Scenes/Levels/Level 5.unity
     guid: 93484a21cf16c4157988609e3e286280
