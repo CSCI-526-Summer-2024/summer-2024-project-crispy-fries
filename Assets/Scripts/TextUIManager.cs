@@ -52,6 +52,15 @@ public class TextUIManager : MonoBehaviour
         StartCoroutine(ShowAndFadeHintCoroutine());
     }
 
+    public void TriggerHint(string hintValue){
+        hintText.text = hintValue;
+        hintText.alpha = 1;
+    }
+
+    public void DeTriggerHint(){
+        hintText.alpha = 0;
+    }
+
     public void TriggerText(){
         StartCoroutine(ShowTriggeredText());
     }
@@ -160,7 +169,7 @@ public class TextUIManager : MonoBehaviour
             return;
         }
         Vector3 playerPos = grid.WorldToCell(player.transform.position);
-        Debug.Log(playerPos);
+        //Debug.Log(playerPos);
 
         if (playerPos == new Vector3(-8.0f,-3.0f,0.0f)){
             StartCoroutine(ShowSecondHintCoroutine());

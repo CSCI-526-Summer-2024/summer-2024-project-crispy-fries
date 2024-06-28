@@ -1,20 +1,19 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Checkpoint : MonoBehaviour
+public class CheckpointHint : MonoBehaviour
 {
-    private CheckpointManager checkpointManager;
-    public string checkpointName;
+    private CheckpointHintManager checkpointHintManager;
+    [SerializeField] private string checkpointName;
     public string hintValue;
     public bool hasPassed;
     private TextUIManager textUIManager;
     
     void Start()
     {
-        checkpointName = this.name;
         hasPassed = false;
-        checkpointManager = FindObjectOfType<CheckpointManager>();
-        checkpointManager.RegisterCheckpoint(this.gameObject);
+        checkpointHintManager = FindObjectOfType<CheckpointHintManager>();
+        checkpointHintManager.RegisterCheckpoint(this.gameObject);
         textUIManager = FindObjectOfType<TextUIManager>();
     }
 
@@ -23,7 +22,7 @@ public class Checkpoint : MonoBehaviour
         if (other.CompareTag("Player") && !hasPassed)
         {
             hasPassed = true;
-            checkpointManager.PassCheckpoint(this.gameObject);
+            checkpointHintManager.PassCheckpoint(this.gameObject);
             textUIManager.TriggerHint(hintValue);
         }
     }

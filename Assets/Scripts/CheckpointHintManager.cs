@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class CheckpointManager : MonoBehaviour
+public class CheckpointHintManager : MonoBehaviour
 {
     private List<GameObject> checkpoints = new();
     private TextUIManager textUIManager;
@@ -18,7 +18,8 @@ public class CheckpointManager : MonoBehaviour
 
     public void PassCheckpoint(GameObject checkpoint)
     {
-        textUIManager.TriggerText();
+        string hintValue = checkpoint.GetComponent<CheckpointHint>().hintValue;
+        bool hasPassed = checkpoint.GetComponent<CheckpointHint>().hasPassed;
     }
 
     public List<string> GetPassedCheckpoints()
