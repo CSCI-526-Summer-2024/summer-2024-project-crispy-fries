@@ -11,7 +11,7 @@ public class TextUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI deathText;
     [SerializeField] private TextMeshProUGUI winText;
-    [SerializeField] private TextMeshProUGUI hintText;
+    public TextMeshProUGUI hintText;
     [SerializeField] private TextMeshProUGUI hintText2;
 
     [SerializeField] private TextMeshProUGUI triggeredText;
@@ -49,7 +49,7 @@ public class TextUIManager : MonoBehaviour
     }
 
     public void ShowAndFadeHint(){
-        StartCoroutine(ShowAndFadeHintCoroutine());
+        //StartCoroutine(ShowAndFadeHintCoroutine());
     }
 
     public void TriggerHint(string hintValue){

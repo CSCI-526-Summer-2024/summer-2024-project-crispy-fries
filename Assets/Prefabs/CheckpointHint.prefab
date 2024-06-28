@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointName: 
+  offset: {x: -20, y: 0, z: 0}
   hintValue: 
   hasPassed: 0
 --- !u!61 &8783251865740559002
