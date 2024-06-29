@@ -46,9 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointName: 
-  offset: {x: -20, y: 0, z: 0}
+  offset: {x: 0, y: 0, z: 0}
   hintValue: 
   hasPassed: 0
+  delay: 3
 --- !u!61 &8783251865740559002
 BoxCollider2D:
   m_ObjectHideFlags: 0

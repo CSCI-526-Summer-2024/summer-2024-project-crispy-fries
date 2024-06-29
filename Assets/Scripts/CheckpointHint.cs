@@ -1,14 +1,17 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class CheckpointHint : MonoBehaviour
 {
     private CheckpointHintManager checkpointHintManager;
     [SerializeField] private string checkpointName;
-    [SerializeField] private Vector3 offset;
+    public Vector3 offset;
     private GameObject player;
     public string hintValue;
     public bool hasPassed;
+    [SerializeField] private float delay = 3.0f;
+    private Coroutine hintCoroutine;
     private TextUIManager textUIManager;
     
     void Start()
@@ -22,9 +25,7 @@ public class CheckpointHint : MonoBehaviour
 
     void Update()
     {   
-        Vector3 offset = new Vector3(0, 2, 0);
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint (player.transform.position + offset); // pass the world position
-        textUIManager.hintText.transform.position = screenPosition; // set the UI Transform's position as it will accordingly adjust the RectTransform values
+       
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -33,7 +34,7 @@ public class CheckpointHint : MonoBehaviour
         {
             hasPassed = true;
             checkpointHintManager.PassCheckpoint(this.gameObject);
-            textUIManager.TriggerHint(hintValue);
+            hintCoroutine = StartCoroutine(ShowHintWithDelay());
         }
     }
 
@@ -41,7 +42,18 @@ public class CheckpointHint : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (hintCoroutine != null)
+            {
+                StopCoroutine(hintCoroutine);
+                hintCoroutine = null;
+            }
             textUIManager.DeTriggerHint();
         }
+    }
+
+    private IEnumerator ShowHintWithDelay()
+    {
+        yield return new WaitForSeconds(delay);
+        textUIManager.TriggerHint(this);
     }
 }

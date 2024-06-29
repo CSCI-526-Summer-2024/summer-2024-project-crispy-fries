@@ -24,7 +24,7 @@ public class Checkpoint : MonoBehaviour
         {
             hasPassed = true;
             checkpointManager.PassCheckpoint(this.gameObject);
-            textUIManager.TriggerHint(hintValue);
+            // textUIManager.TriggerHint(hintValue);
         }
     }
 
@@ -32,7 +32,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            textUIManager.DeTriggerHint();
+            // textUIManager.DeTriggerHint();
         }
     }
 }
