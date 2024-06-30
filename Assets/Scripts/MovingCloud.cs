@@ -6,11 +6,12 @@ public class MovingPlatform : MonoBehaviour
 {
     public Transform posA, posB;
     public float speed;
-    public bool moving=false;
+    public bool moving;
     Vector3 targetPos;
 
     private void Start()
     {
+        moving = true;
         targetPos = posB.position;
     }
     void Update()

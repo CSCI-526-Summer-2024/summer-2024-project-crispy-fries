@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -11,7 +12,11 @@ public class TextUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI deathText;
     [SerializeField] private TextMeshProUGUI winText;
-    [SerializeField] private TextMeshProUGUI hintText;
+    public TextMeshProUGUI hintText;
+    Vector3 hintOffset = Vector3.zero;
+
+    private Coroutine fadeCoroutine;
+    private float fadeDuration = 0.5f;
     [SerializeField] private TextMeshProUGUI hintText2;
 
     [SerializeField] private TextMeshProUGUI triggeredText;
@@ -36,7 +41,9 @@ public class TextUIManager : MonoBehaviour
     }
     void Update()
     {
-        ShowSecondHint();
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint (player.transform.position + hintOffset); // pass the world position
+        hintText.transform.position = screenPosition; // set the UI Transform's position as it will accordingly adjust the RectTransform values
+        // ShowSecondHint();
     }
 
     public void ShowAndFadeLevel()
@@ -49,7 +56,56 @@ public class TextUIManager : MonoBehaviour
     }
 
     public void ShowAndFadeHint(){
-        StartCoroutine(ShowAndFadeHintCoroutine());
+        //StartCoroutine(ShowAndFadeHintCoroutine());
+    }
+
+    public void TriggerHint(CheckpointHint hint){
+        hintOffset = hint.offset;
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+        fadeCoroutine = StartCoroutine(FadeInText(hint.hintValue));
+    }
+
+    public void DeTriggerHint(){
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+        fadeCoroutine = StartCoroutine(FadeOutText());
+    }
+
+    private IEnumerator FadeInText(string text)
+    {
+        hintText.text = text;
+        hintText.color = new Color(hintText.color.r, hintText.color.g, hintText.color.b, 0);
+        float elapsedTime = 0;
+
+        while (elapsedTime < fadeDuration)
+        {
+            hintText.color = new Color(hintText.color.r, hintText.color.g, hintText.color.b, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        hintText.color = new Color(hintText.color.r, hintText.color.g, hintText.color.b, 1);
+    }
+
+    private IEnumerator FadeOutText()
+    {
+        float elapsedTime = 0;
+        Color originalColor = hintText.color;
+
+        while (elapsedTime < fadeDuration)
+        {
+            hintText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1 - (elapsedTime / fadeDuration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        hintText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+        hintText.text = "";
     }
 
     public void TriggerText(){
@@ -109,13 +165,6 @@ public class TextUIManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private IEnumerator ShowAndFadeHintCoroutine()
-    {   
-        hintText.alpha = 1;
-        yield return new WaitForSeconds(10);
-        hintText.alpha = 0;
-    }
-
     private IEnumerator WinGameCoroutine()
     {
         winText.alpha = 1f;
@@ -160,7 +209,7 @@ public class TextUIManager : MonoBehaviour
             return;
         }
         Vector3 playerPos = grid.WorldToCell(player.transform.position);
-        Debug.Log(playerPos);
+        //Debug.Log(playerPos);
 
         if (playerPos == new Vector3(-8.0f,-3.0f,0.0f)){
             StartCoroutine(ShowSecondHintCoroutine());
