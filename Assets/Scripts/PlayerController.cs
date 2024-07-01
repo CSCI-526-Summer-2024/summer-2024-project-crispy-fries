@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Networking;
+using UnityEditor.Rendering.LookDev;
+using static PlayerController;
 
 public class PlayerController : MonoBehaviour
 {
@@ -91,6 +93,7 @@ public class PlayerController : MonoBehaviour
 
     private FloorMaterial floorMaterial;
 
+    private CameraShake cameraShake;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -118,6 +121,7 @@ public class PlayerController : MonoBehaviour
 
         checkpointManager = FindObjectOfType<CheckpointManager>();
         gameManager = FindObjectOfType<GameManager>();
+        cameraShake = Camera.main.GetComponent<CameraShake>();
     }
 
     void Update()
@@ -179,6 +183,12 @@ public class PlayerController : MonoBehaviour
         if (!gameManager.GameIsPaused && Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.RegularTile)
         {
             SetStateShadowDive();
+        }
+        else if (!gameManager.GameIsPaused && Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.GlassTile)
+        {
+            // trying to dive on glass
+            //StartCoroutine(cameraShake.Shake(0.3f, 0.1f));
+            StartCoroutine(Shake(0.2f, 0.1f));
         }
         CheckFlip(move);
         CheckIfGrounded();
@@ -731,7 +741,24 @@ public class PlayerController : MonoBehaviour
         };
     }
 
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+        Vector3 originalPosition = transform.localPosition;
+        float elapsed = 0.0f;
 
+        while (elapsed < duration)
+        {
+            float x = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            float y = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+
+            transform.localPosition = new Vector3(originalPosition.x + x, originalPosition.y + y, originalPosition.z);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localPosition = originalPosition;
+    }
 
 
     private IEnumerator Post(string randomId, string sceneIndex, int[] light, bool isDead, int lightnumber)

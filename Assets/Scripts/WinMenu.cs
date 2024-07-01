@@ -84,7 +84,7 @@ public class WinMenu : MonoBehaviour
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene("Level Selection");
+        SceneManager.LoadScene("MainMenu");
         LevelIsComplete = false;
         gameManager.GameIsPaused = false;
 

@@ -229,7 +229,11 @@ public class SpotLightController : MonoBehaviour
             baseLight.color = Color.white;
         }
 
-        if (!isToggleable) timerProgress.SetActive(false);
+        if (!isToggleable)
+        {
+            timerProgress.SetActive(false);
+            SetFlapColors(new Color(0.55f, 0.27f, 0.07f));
+        }
         else timerProgress.SetActive(true);
         PositionFlaps();
 
@@ -248,6 +252,14 @@ public class SpotLightController : MonoBehaviour
 
             leftFlapPivot.transform.localRotation = Quaternion.Euler(0, 0, -halfAngle);
             rightFlapPivot.transform.localRotation = Quaternion.Euler(0, 0, halfAngle);
+        }
+    }
+    private void SetFlapColors(Color color)
+    {
+        if (leftFlapPivot != null && rightFlapPivot != null)
+        {
+            leftFlapPivot.transform.Find("LeftFlap").GetComponent<SpriteRenderer>().color = color;
+            rightFlapPivot.transform.Find("RightFlap").GetComponent<SpriteRenderer>().color = color;
         }
     }
 
