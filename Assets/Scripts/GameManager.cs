@@ -46,4 +46,11 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public void WinGame()
+    {
+        player.GetComponent<PlayerController>().Win();
+        FindObjectOfType<WinMenu>().WinGame();
+        gameIsPaused = true;
+    }
 }

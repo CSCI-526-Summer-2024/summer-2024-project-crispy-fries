@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class WinMenu : MonoBehaviour
 {
-    public static bool LevelIsComplete = false;
+    public bool LevelIsComplete = false;
 
     public GameObject WinMenuUI;
 
@@ -48,31 +48,32 @@ public class WinMenu : MonoBehaviour
     void Update()
     {
 
-
-        if (LevelIsComplete)
-        {
-            pausedMenuGroup.SetActive(true);
-            resumeButton.SetActive(false);
-
-            if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
-                // Last level
-                Debug.Log("Last Level!");
-                nextLevelButton.SetActive(false);
-                
-                winText.text = "Game Completed! Congrats";
-            }
-            else {
-                nextLevelButton.SetActive(true);
-                winText.text = "Level Completed!";
-            }
-        }
-
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(!LevelIsComplete && Input.GetKeyDown(KeyCode.Escape))
         {
             if(gameManager.GameIsPaused) this.Play();
             else this.Pause();
         }
         
+    }
+
+    public void WinGame()
+    {
+        LevelIsComplete = true;
+        pausedMenuGroup.SetActive(true);
+        resumeButton.SetActive(false);
+        pauseButton.SetActive(false);
+
+        if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
+            // Last level
+            Debug.Log("Last Level!");
+            nextLevelButton.SetActive(false);
+            
+            winText.text = "Game Completed! Congrats";
+        }
+        else {
+            nextLevelButton.SetActive(true);
+            winText.text = "Level Completed!";
+        }
     }
 
     public void NextLevel()
