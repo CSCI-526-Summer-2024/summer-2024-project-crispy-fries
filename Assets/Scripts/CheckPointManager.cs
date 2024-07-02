@@ -18,7 +18,7 @@ public class CheckpointManager : MonoBehaviour
 
     public void PassCheckpoint(GameObject checkpoint)
     {
-        textUIManager.TriggerText();
+        // textUIManager.TriggerText();
     }
 
     public List<string> GetPassedCheckpoints()

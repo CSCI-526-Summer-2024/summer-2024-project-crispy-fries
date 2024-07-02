@@ -23,14 +23,15 @@ public class WinMenu : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
 
     [SerializeField] private GameObject resumeButton;
-    [SerializeField] private GameObject controlsPage;
+    [SerializeField] private GameObject controlsGroup;
+
+    [SerializeField] private GameObject pausedMenuGroup;
 
     private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        WinMenuUI.SetActive(false);
         gameManager = FindObjectOfType<GameManager>();
         Scene currentScene = SceneManager.GetActiveScene();
         currBuildIndex = currentScene.buildIndex;
@@ -38,9 +39,8 @@ public class WinMenu : MonoBehaviour
         sceneName = currentScene.name;
         levelManager = FindAnyObjectByType<LevelManager>();
 
-        playButton.SetActive(false);
         pauseButton.SetActive(true);
-        controlsPage.SetActive(false);
+        playButton.SetActive(false);
     }
 
 
@@ -51,8 +51,9 @@ public class WinMenu : MonoBehaviour
 
         if (LevelIsComplete)
         {
+            pausedMenuGroup.SetActive(true);
             resumeButton.SetActive(false);
-            WinMenuUI.SetActive(true);
+
             if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
                 // Last level
                 Debug.Log("Last Level!");
@@ -97,41 +98,22 @@ public class WinMenu : MonoBehaviour
     }
     public void Pause()
     {
-        playButton.SetActive(true);
-        pauseButton.SetActive(false);
+        pausedMenuGroup.SetActive(true);
         nextLevelButton.SetActive(false);
-        resumeButton.SetActive(true);
-
-
+        pauseButton.SetActive(false);
+        playButton.SetActive(true);
         gameManager.GameIsPaused = true;
 
         winText.text = "Paused";
-        WinMenuUI.SetActive(true);
-
-        
-
        
     }
     public void Play()
     {
-        playButton.SetActive(false);
+        controlsGroup.SetActive(false);
+        pausedMenuGroup.SetActive(false);
         pauseButton.SetActive(true);
+        playButton.SetActive(false);
         gameManager.GameIsPaused = false;
-        controlsPage.SetActive(false);
-        WinMenuUI.SetActive(false);
-    }
-
-    public void ShowControlsPage()
-    {
-        controlsPage.SetActive(true);
-        WinMenuUI.SetActive(false);
-
-
-    }
-    public void ControlsPageBackButton()
-    {
-        controlsPage.SetActive(false);
-        WinMenuUI.SetActive(true);
         
     }
 }

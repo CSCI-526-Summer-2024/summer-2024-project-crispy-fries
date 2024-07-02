@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public TextUIManager textUIManager;
     public LevelManager levelManager;
 
+    public CheckpointManager checkpointManager;
+
     public string buildName = "Thursday Post Beta Progress Check";
 
     public GameObject player;

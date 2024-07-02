@@ -8,14 +8,10 @@ public class TileTrigger : MonoBehaviour
 {    
     [SerializeField] private GameManager gameManager;
 
-    [SerializeField] private LevelManager levelManager;
 
     private void Start()
     {
-        if (levelManager == null)
-        {
-            levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        }   
+
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -25,8 +21,7 @@ public class TileTrigger : MonoBehaviour
         {
             Debug.Log("goal reached");
             WinMenu.LevelIsComplete = true;
-            gameManager.player.GetComponent<PlayerController>().Win();
-            //levelManager.LoadNextScene();
+
         }
     }
 }

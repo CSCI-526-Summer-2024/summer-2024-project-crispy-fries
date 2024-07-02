@@ -613,9 +613,6 @@ MonoBehaviour:
   winText: {fileID: 4331108458789812421}
   hintText: {fileID: 160313696544891090}
   hintText2: {fileID: 6525546990862596751}
-  triggeredText: {fileID: 0}
-  triggeredText1: {fileID: 0}
-  triggeredText2: {fileID: 0}
   player: {fileID: 0}
   grid: {fileID: 0}
 --- !u!1 &6022169659455628673
@@ -939,6 +936,7 @@ Transform:
   - {fileID: 259882730051368073}
   - {fileID: 808083399943401031}
   - {fileID: 3838170237369106469}
+  - {fileID: 2505128779636155670}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4161418339484431283
@@ -956,6 +954,7 @@ MonoBehaviour:
   spotLightManager: {fileID: 4299105660954329544}
   textUIManager: {fileID: 5643916409823580687}
   levelManager: {fileID: 2164351535224748004}
+  checkpointManager: {fileID: 100958376047610460}
   buildName: Alpha Prototype
   player: {fileID: 0}
 --- !u!1 &8453205630344332143
@@ -1023,7 +1022,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tip: Light that mixes to white will kill you!'
+  m_text: Hint 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1092,6 +1091,79 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1001 &5026368502842414179
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2545548619694004851}
+    m_Modifications:
+    - target: {fileID: 1645017740350366004, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_Name
+      value: CheckPointManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.16100821
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.5050085
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.17970091
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+--- !u!114 &100958376047610460 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4947083924859346495, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+  m_PrefabInstance: {fileID: 5026368502842414179}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3382415ae71eb406b9ac7ae9a5643a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2505128779636155670 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7423408692331049333, guid: 2c2d14f8b9c0146feb0d82326b4ed172, type: 3}
+  m_PrefabInstance: {fileID: 5026368502842414179}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7176140997487503464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1102,7 +1174,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1024877500856616336, guid: a2df8007b07e447a2a9cc3f21ec575b9, type: 3}
       propertyPath: m_Name
-      value: CheckPointManager
+      value: CheckPointHintManager
       objectReference: {fileID: 0}
     - target: {fileID: 6256957051885381709, guid: a2df8007b07e447a2a9cc3f21ec575b9, type: 3}
       propertyPath: m_LocalPosition.x
