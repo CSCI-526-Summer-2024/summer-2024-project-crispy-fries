@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,6 +17,8 @@ public class SpotLightController : MonoBehaviour
     [SerializeField]
     private float disabledTime;
 
+    [SerializeField] private float maxTimerInScene = 5;
+
     public bool isToggleable;
 
     [SerializeField]
@@ -29,6 +32,8 @@ public class SpotLightController : MonoBehaviour
     [SerializeField]
     private GameObject timerProgress;
     private Coroutine countdownCoroutine;
+
+
     
     public string LightColorHex
     {
@@ -234,7 +239,19 @@ public class SpotLightController : MonoBehaviour
             timerProgress.SetActive(false);
             SetFlapColors(new Color(0.55f, 0.27f, 0.07f));
         }
-        else timerProgress.SetActive(true);
+        else
+        {
+            timerProgress.SetActive(true);
+            float initialMaskRotation = (1-disabledTime/maxTimerInScene)*180;
+            Transform progressMaskPivot = timerProgress.transform.Find("TimerBarMaskPivot");
+            Transform sizeMaskPivot = timerProgress.transform.Find("TimerBar/SizeMaskPivot");
+            Debug.Log(sizeMaskPivot);
+            progressMaskPivot.transform.localEulerAngles = new Vector3(0, 0, initialMaskRotation);
+            sizeMaskPivot.transform.localEulerAngles = new Vector3(0, 0, initialMaskRotation);
+
+        }
+
+
         PositionFlaps();
 
         // Force the editor to update
@@ -272,10 +289,11 @@ public class SpotLightController : MonoBehaviour
     {
         IsLightOn = false;
         float timer = disabledTime; // Set the timer to the full duration
-        float startRotation = 180f;
-        float endRotation = 0f;
         Transform spriteMaskPivot = timerProgress.transform.Find("TimerBarMaskPivot");
-        SpriteRenderer timerBarSprite = timerProgress.GetComponentInChildren<SpriteRenderer>();
+        float startRotation = (1-disabledTime/maxTimerInScene)*180;
+        float endRotation = 180f;
+        
+        SpriteRenderer timerBarSprite = timerProgress.transform.Find("TimerBar/BaseCircle").GetComponent<SpriteRenderer>();
         timerBarSprite.color = Color.yellow;
 
         while (timer > 0)
@@ -294,7 +312,7 @@ public class SpotLightController : MonoBehaviour
         }
 
         // Ensure the mask is fully rotated at the end
-        spriteMaskPivot.transform.localEulerAngles = new Vector3(0, 0, endRotation);
+        spriteMaskPivot.transform.localEulerAngles = new Vector3(0, 0, (1-disabledTime/maxTimerInScene)*180);
         
         timerBarSprite.color = Color.green;
         IsLightOn = true;
