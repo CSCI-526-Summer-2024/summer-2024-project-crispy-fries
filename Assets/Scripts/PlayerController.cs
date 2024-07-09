@@ -668,7 +668,6 @@ public class PlayerController : MonoBehaviour
         {
             floorMaterial = FloorMaterial.None;
         }
-        //TODO: Change front ground check to raycast 
         isGrounded = circleHit || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer | glassLayer);
     }
 

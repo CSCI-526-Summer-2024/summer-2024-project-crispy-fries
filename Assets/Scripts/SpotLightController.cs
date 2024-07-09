@@ -245,7 +245,6 @@ public class SpotLightController : MonoBehaviour
             float initialMaskRotation = (1-disabledTime/maxTimerInScene)*180;
             Transform progressMaskPivot = timerProgress.transform.Find("TimerBarMaskPivot");
             Transform sizeMaskPivot = timerProgress.transform.Find("TimerBar/SizeMaskPivot");
-            Debug.Log(sizeMaskPivot);
             progressMaskPivot.transform.localEulerAngles = new Vector3(0, 0, initialMaskRotation);
             sizeMaskPivot.transform.localEulerAngles = new Vector3(0, 0, initialMaskRotation);
 
