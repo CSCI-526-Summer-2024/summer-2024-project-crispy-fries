@@ -13,7 +13,7 @@ public class TextUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI deathText;
     [SerializeField] private TextMeshProUGUI winText;
     public TextMeshProUGUI hintText;
-    Vector3 hintOffset = Vector3.zero;
+    [SerializeField] private Vector3 hintOffset;
 
     private Coroutine fadeCoroutine;
     private float fadeDuration = 0.5f;
@@ -37,6 +37,7 @@ public class TextUIManager : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player");
         }
         secondHint = false;
+        hintOffset = new Vector3(0,2,0);
     }
     void Update()
     {

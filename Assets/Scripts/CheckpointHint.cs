@@ -21,6 +21,7 @@ public class CheckpointHint : MonoBehaviour
         checkpointHintManager.RegisterCheckpoint(this.gameObject);
         textUIManager = FindObjectOfType<TextUIManager>();
         player = GameObject.FindGameObjectWithTag("Player");
+        offset = new Vector3(0,2,0);
     }
 
     void Update()
