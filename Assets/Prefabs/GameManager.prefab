@@ -612,6 +612,7 @@ MonoBehaviour:
   deathText: {fileID: 4774531326211245389}
   winText: {fileID: 4331108458789812421}
   hintText: {fileID: 160313696544891090}
+  hintOffset: {x: 0, y: 0, z: 0}
   hintText2: {fileID: 6525546990862596751}
   player: {fileID: 0}
   grid: {fileID: 0}
@@ -955,7 +956,7 @@ MonoBehaviour:
   textUIManager: {fileID: 5643916409823580687}
   levelManager: {fileID: 2164351535224748004}
   checkpointManager: {fileID: 100958376047610460}
-  buildName: Alpha Prototype
+  buildName: Beta Build
   player: {fileID: 0}
 --- !u!1 &8453205630344332143
 GameObject:

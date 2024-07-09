@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     public CheckpointManager checkpointManager;
 
-    public string buildName = "Pre Beta";
+    public string buildName = "Beta Build";
 
     public GameObject player;
     
