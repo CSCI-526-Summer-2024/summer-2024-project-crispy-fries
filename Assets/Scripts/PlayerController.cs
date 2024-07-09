@@ -183,7 +183,8 @@ public class PlayerController : MonoBehaviour
         {
             SetStateShadowDive();
         }
-        else if (!gameManager.GameIsPaused && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.GlassTile)
+        else if ((!gameManager.GameIsPaused && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.GlassTile) || 
+        (!gameManager.GameIsPaused && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && isInLight && isGrounded && feetOn == FloorType.Ground))
         {
             // trying to dive on glass
             //StartCoroutine(cameraShake.Shake(0.3f, 0.1f));
@@ -378,7 +379,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))&& canTransformToNormal())
+        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && canTransformToNormal())
         {
             SetStateNormal();
             return;
