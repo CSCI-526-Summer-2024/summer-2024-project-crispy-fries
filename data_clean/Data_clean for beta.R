@@ -15,7 +15,7 @@ gs4_auth(scopes = scopes)
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1zKLYZq8zkGUDxTR48Jd24c4RQ4_VVgxisQf7dF7kiGA/edit?resourcekey=&gid=1465979568#gid=1465979568"
 data <- read_sheet(sheet_url)
-
+data <- data %>% filter(`Scene Number` <=9) %>% filter(`Scene Number` != 0)
 
 
 
@@ -30,21 +30,21 @@ Alpha_prog_build_time <- as.Date("2024-6-21")
 Alpha_build_time <- as.Date("2024-6-19")
 
 
+Beta_final_time <- as.Date("2024-7-4")
+
 Alpha <- data %>% filter(Timestamp <= Alpha_build_time)
 Alpha_prog <-data %>% filter(Timestamp<= Alpha_prog_build_time & Timestamp > Alpha_build_time)
 Beta <- data %>% filter(Timestamp <= Beta_build_time & Timestamp > Alpha_prog_build_time)
 Beta_prog_build_time <- data %>% filter(Timestamp <= Beta_prog_build_time & Timestamp > Beta_build_time)
 
 
-
-
+Beta_final_build <- data %>% filter(Timestamp >= Beta_final_time)
 
 
 
 
 
 graph_and_analysis <-function(x) {
-  
   ## 1 Filter ratioLight with correct setting and draw heat map
   data1inFun <- x %>%
     mutate(RatioLight1 = `Time in light area of disabled light 1` / Light1TimeOff,
@@ -67,19 +67,21 @@ graph_and_analysis <-function(x) {
     labs(title = "Heatmap of Time Ratios in Disabled Light Areas", x = "Light Area", y = "Scene")
   
   ## 2 Number of Times Caught by Spotlights
+  x <- x %>%
+    mutate(DeadtoLight = replace_na(DeadtoLight, -1))
   death_counts <- x %>%
-    group_by(DeadtoLight) %>%
-    summarize(Deaths = n())
+    group_by(`Scene Number`, DeadtoLight) %>%
+    summarize(Deaths = n(),.groups = 'drop')
   
-  p2 <- ggplot(death_counts, aes(x = DeadtoLight, y = Deaths)) +
-    geom_bar(stat = "identity", fill = "tomato") +
-    labs(title = "Deaths by Spotlight", x = "Light", y = "Number of Deaths")
+  p2 <- ggplot(death_counts, aes(x = DeadtoLight, y = Deaths, fill=DeadtoLight)) +
+    geom_bar(stat = "identity") +   
+    facet_wrap(~ `Scene Number`) +
+    labs(title = "Deaths by Spotlight per Scene", x = "Light", y = "Number of Deaths") +
+    theme_minimal()
   
   
 
-  
-  
-  
+
   ## Metric #3: Route tracking via checkpoints
   checkpoint_list <- x %>%
     mutate(AllCheckPointPassed = strsplit(AllCheckPointsPassed, ",")) %>%
@@ -97,15 +99,27 @@ graph_and_analysis <-function(x) {
   
   # Metric #4: Time Spent in Shadow and Normal Form
   # data_for_metric4 <- x %>% filter()
+  library(dplyr)
+  
   form_times <- x %>%
     group_by(`Scene Number`) %>%
-    summarise(AvgShadowFormTime = mean(ShadowFormTime), AvgNormalFormTime = mean(NormalFormTime))
+    summarise(
+      AvgShadowFormTime = mean(coalesce(ShadowFormTime, 0), na.rm = TRUE),
+      AvgNormalFormTime = mean(coalesce(NormalFormTime, 0), na.rm = TRUE)
+    )
   
   
-  p4 <- ggplot(form_times, aes(x = `Scene Number`, y = AvgShadowFormTime, fill = "Shadow Form")) +
-    geom_bar(stat = "identity") +
-    geom_bar(aes(y = AvgNormalFormTime, fill = "Normal Form"), stat = "identity") +
-    labs(title = "Average Time Spent in Forms per Level", x = "Level", y = "Average Time")
+  form_times_long <- form_times %>%
+    pivot_longer(cols = c(AvgShadowFormTime, AvgNormalFormTime),
+                 names_to = "FormType",
+                 values_to = "AverageTime")
+  
+  # Create the bar plot
+  p4<-ggplot(form_times_long, aes(x = factor(`Scene Number`), y = AverageTime, fill = FormType)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    labs(x = "Scene Number", y = "Average Time", title = "Average Form Time by Scene Number") +
+    scale_fill_manual(values = c("AvgShadowFormTime" = "blue", "AvgNormalFormTime" = "red")) +
+    theme_minimal()
   
   grid.arrange(p1, p2, p3,p4,  nrow = 2)
   
@@ -118,12 +132,7 @@ graph_and_analysis(Beta_prog_build_time)
 
 
 
-
-
-
-
-
-
+graph_and_analysis(Beta_final_build)
 
 
 
