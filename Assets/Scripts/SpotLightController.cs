@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -25,6 +26,8 @@ public class SpotLightController : MonoBehaviour
     private GameObject leftFlapPivot;
     [SerializeField]
     private GameObject rightFlapPivot;
+    [SerializeField]
+    private GameObject silhouette;
 
     [SerializeField]
     private SpriteRenderer bulbRenderer;
@@ -97,6 +100,7 @@ public class SpotLightController : MonoBehaviour
         IsLightOn = true;
         timerProgress.transform.Find("TimerBarMaskPivot").localEulerAngles = new Vector3(0, 0, 0);;
         timerProgress.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+        silhouette.SetActive(false);
         if (countdownCoroutine != null)
         {
             StopCoroutine(countdownCoroutine);
@@ -252,6 +256,8 @@ public class SpotLightController : MonoBehaviour
 
 
         PositionFlaps();
+        UpdateBulbColor();
+        buildSilhouette();
 
         // Force the editor to update
         #if UNITY_EDITOR
@@ -281,7 +287,27 @@ public class SpotLightController : MonoBehaviour
 
     private void UpdateBulbColor()
     {
-        bulbRenderer.color = isLightOn ? Color.white : Color.grey;
+        bulbRenderer.color = isLightOn ? new Color(baseLight.color.r,baseLight.color.g,baseLight.color.b,0.5f) : Color.grey;
+    }
+
+    private void buildSilhouette()
+    {
+        LineRenderer lr = silhouette.GetComponent<LineRenderer>();
+
+        lr.positionCount=16;
+        var points = new Vector3[lr.positionCount];
+        //set first and last point to center of light
+        points[0] = transform.position;
+        points[lr.positionCount-1] = transform.position;
+
+        for(int i=1;i<lr.positionCount-1;i++)
+        {
+
+            float deltaAngle = (-transform.eulerAngles.z+Mathf.Lerp(-angle/2,angle/2, (float)(i-1)/(lr.positionCount-3))) * Mathf.Deg2Rad;
+            Vector3 delta = new Vector3(Mathf.Sin(deltaAngle), Mathf.Cos(deltaAngle),0);
+            points[i] = transform.position + radius*delta;
+        }
+        lr.SetPositions(points);
     }
 
     private IEnumerator CountdownCoroutine()
@@ -294,6 +320,7 @@ public class SpotLightController : MonoBehaviour
         
         SpriteRenderer timerBarSprite = timerProgress.transform.Find("TimerBar/BaseCircle").GetComponent<SpriteRenderer>();
         timerBarSprite.color = Color.yellow;
+        silhouette.SetActive(true);
 
         while (timer > 0)
         {
@@ -302,6 +329,7 @@ public class SpotLightController : MonoBehaviour
             float t = (disabledTime - timer) / disabledTime;
             float currentRotation = Mathf.Lerp(startRotation, endRotation, t);
             spriteMaskPivot.transform.localEulerAngles = new Vector3(0, 0, currentRotation);
+            silhouette.GetComponent<LineRenderer>().material.SetTextureOffset("_MainTex", Vector2.right * timer * 0.5f);
 
             // Wait for the next frame
             yield return null;
@@ -315,6 +343,7 @@ public class SpotLightController : MonoBehaviour
         
         timerBarSprite.color = Color.green;
         IsLightOn = true;
+        silhouette.SetActive(false);
         countdownCoroutine = null;
     }
 
@@ -323,7 +352,8 @@ public class SpotLightController : MonoBehaviour
         baseLight.pointLightInnerRadius = radius;
         baseLight.pointLightOuterRadius = radius;
         UpdateBulbColor();
-    
+        silhouette.SetActive(false);
+        silhouette.GetComponent<LineRenderer>().material.SetColor("_Color", bulbRenderer.color); // set color of dashed line
     }
 
     // Update is called once per frame
