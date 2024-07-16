@@ -30,9 +30,9 @@ public class CheckpointHint : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !hasPassed)
+        if (other.CompareTag("Player"))
         {
-            hasPassed = true;
+            // hasPassed = true;
             checkpointHintManager.PassCheckpoint(this.gameObject);
             hintCoroutine = StartCoroutine(ShowHintWithDelay());
         }
