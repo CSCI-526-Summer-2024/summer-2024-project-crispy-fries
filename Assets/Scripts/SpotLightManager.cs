@@ -69,6 +69,17 @@ public class SpotLightManager : MonoBehaviour
         selector.transform.position = Vector3.Lerp(selector.transform.position, targetPosition, 10 * Time.deltaTime);
         selector.transform.Rotate(Vector3.forward, 100 * Time.deltaTime);
 
+        // Rotate Spotlights
+        foreach (GameObject spotlight in spotLightArray){
+            if (spotlight.GetComponent<SpotLightController>().doesRotate){
+                RotateSpotlight(spotlight, 0.5f);
+            }
+        }
+        // r, 160, 230
+        // g, 0, 90
+        // g(1), 270, 180
+        // b 0, 270
+        // y, 150, 210
     }
 
     void ToggleSelectedLight()
@@ -107,6 +118,15 @@ public class SpotLightManager : MonoBehaviour
 
     public GameObject[] getSpotLightArray(){
         return spotLightArray;
+    }
+
+    public void RotateSpotlight(GameObject spotlight, float freq)
+    {
+        SpotLightController controller = spotlight.GetComponent<SpotLightController>();
+        Quaternion from = Quaternion.Euler(new Vector3(0,0,controller.rotationAngleFrom));
+        Quaternion to = Quaternion.Euler(new Vector3(0,0,controller.rotationAngleTo));
+        float lerp = 0.5F * (1.0F + Mathf.Sin(Mathf.PI * Time.realtimeSinceStartup * freq));
+        spotlight.transform.localRotation = Quaternion.Lerp(from, to, lerp);
     }
 
     

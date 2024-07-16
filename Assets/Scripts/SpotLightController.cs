@@ -35,6 +35,9 @@ public class SpotLightController : MonoBehaviour
     [SerializeField]
     private GameObject timerProgress;
     private Coroutine countdownCoroutine;
+    public int rotationAngleFrom;
+    public int rotationAngleTo;
+    public bool doesRotate;
 
 
     
