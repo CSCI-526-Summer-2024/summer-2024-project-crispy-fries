@@ -36,6 +36,7 @@ Transform:
   - {fileID: 3717398852966903932}
   - {fileID: 5251940283507290156}
   - {fileID: 8085533684116311409}
+  - {fileID: 7956035740772858227}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6331827682921796327
@@ -194,9 +195,41 @@ MonoBehaviour:
   groundCheck: {fileID: 5251940283507290156}
   wallCheck: {fileID: 3717398852966903932}
   frontGroundCheck: {fileID: 8085533684116311409}
+  backGroundCheck: {fileID: 7956035740772858227}
   checkRadius: 0.2
   shadowDiveScale: 0.9
   verticalSpeed: 0
+--- !u!1 &1790666024131028359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7956035740772858227}
+  m_Layer: 0
+  m_Name: BackGroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7956035740772858227
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790666024131028359}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.7, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 469577042077679863}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4105807898819779157
 GameObject:
   m_ObjectHideFlags: 0
