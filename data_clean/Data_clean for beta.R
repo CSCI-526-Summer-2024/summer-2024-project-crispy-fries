@@ -41,6 +41,9 @@ Beta_prog_build_time <- data %>% filter(Timestamp <= Beta_prog_build_time & Time
 Beta_final_build <- data %>% filter(Timestamp >= Beta_final_time)
 
 
+Beta_7_11 <- data %>% filter(BuildName == "Beta Build_1.0")
+
+
 
 
 
@@ -130,7 +133,7 @@ graph_and_analysis <-function(x) {
 
 graph_and_analysis(Beta_prog_build_time)
 
-
+graph_and_analysis(Beta_7_11)
 
 graph_and_analysis(Beta_final_build)
 

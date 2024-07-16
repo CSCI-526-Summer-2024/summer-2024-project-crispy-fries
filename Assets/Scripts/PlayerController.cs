@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
     public Transform wallCheck; // Wall check position
 
     public Transform frontGroundCheck; // Ground check position
+
+    public Transform backGroundCheck;
     public float checkRadius = 0.2f;
 
     public float shadowDiveScale = 0.9f;
@@ -173,7 +175,10 @@ public class PlayerController : MonoBehaviour
         Vector2 targetVelocity = new Vector2(move * normalSpeed, rb.velocity.y);
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref targetVelocity, 0.0001f);
 
-
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("back pos at" + (transform.position.x-0.45f));
+        }
         if (!gameManager.GameIsPaused  && isGrounded && Input.GetKeyDown(KeyCode.Space) && feetOn == FloorType.Ground)
         {
             Jump();
@@ -226,9 +231,9 @@ public class PlayerController : MonoBehaviour
             // Same for jumping off walls because we rotate sprite to vertical, so make sure sprite is moving towards wall
             else if(isWalled)
             {
-                if(isFacingRight && rb.velocity.x>=0)
+                if(isFacingRight && rb.velocity.x>=0.1)
                     updateFeetOn(FloorType.RightWall);
-                else if(!isFacingRight && rb.velocity.x<=0)
+                else if(!isFacingRight && rb.velocity.x<=-0.1)
                     updateFeetOn(FloorType.LeftWall);
             }
         }
@@ -379,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && canTransformToNormal())
+        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && canTransformToNormal())
         {
             SetStateNormal();
             return;
@@ -669,7 +674,7 @@ public class PlayerController : MonoBehaviour
         {
             floorMaterial = FloorMaterial.None;
         }
-        isGrounded = circleHit || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer | glassLayer);
+        isGrounded = circleHit || Physics2D.Raycast(frontGroundCheck.position, Vector2.down, checkRadius, tileLayer | glassLayer) ||(state == PlayerState.Normal &&  Physics2D.Raycast(backGroundCheck.position, Vector2.down, checkRadius/10f, tileLayer | glassLayer));
     }
 
     void CheckIfWalled()
