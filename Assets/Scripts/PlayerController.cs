@@ -226,9 +226,9 @@ public class PlayerController : MonoBehaviour
             // Same for jumping off walls because we rotate sprite to vertical, so make sure sprite is moving towards wall
             else if(isWalled)
             {
-                if(isFacingRight && rb.velocity.x>=0)
+                if(isFacingRight && rb.velocity.x>=0.1)
                     updateFeetOn(FloorType.RightWall);
-                else if(!isFacingRight && rb.velocity.x<=0)
+                else if(!isFacingRight && rb.velocity.x<=-0.1)
                     updateFeetOn(FloorType.LeftWall);
             }
         }

@@ -17,7 +17,7 @@ public class TileTrigger : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider)
     {
         // Check if the colliding object is the player
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") && gameManager.player.GetComponent<PlayerController>().state != PlayerController.PlayerState.Dead)
         {
             Debug.Log("goal reached");
 
