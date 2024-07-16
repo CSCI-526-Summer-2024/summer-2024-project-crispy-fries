@@ -27,6 +27,11 @@ public class WinMenu : MonoBehaviour
 
     [SerializeField] private GameObject pausedMenuGroup;
 
+    [SerializeField] private GameObject starGroup;
+    [SerializeField] private GameObject star1;
+    [SerializeField] private GameObject star2;
+    [SerializeField] private GameObject star3;
+
     private GameManager gameManager;
 
     // Start is called before the first frame update
@@ -41,6 +46,7 @@ public class WinMenu : MonoBehaviour
 
         pauseButton.SetActive(true);
         playButton.SetActive(false);
+        SetStars(new LevelStars());
     }
 
 
@@ -62,6 +68,7 @@ public class WinMenu : MonoBehaviour
         pausedMenuGroup.SetActive(true);
         resumeButton.SetActive(false);
         pauseButton.SetActive(false);
+        starGroup.SetActive(true);
 
         if (currBuildIndex == SceneManager.sceneCountInBuildSettings - 1) {
             // Last level
@@ -100,6 +107,7 @@ public class WinMenu : MonoBehaviour
     public void Pause()
     {
         pausedMenuGroup.SetActive(true);
+        starGroup.SetActive(false);
         nextLevelButton.SetActive(false);
         pauseButton.SetActive(false);
         playButton.SetActive(true);
@@ -113,8 +121,16 @@ public class WinMenu : MonoBehaviour
         controlsGroup.SetActive(false);
         pausedMenuGroup.SetActive(false);
         pauseButton.SetActive(true);
+        starGroup.SetActive(true);
         playButton.SetActive(false);
         gameManager.GameIsPaused = false;
         
+    }
+
+    public void SetStars(LevelStars stars)
+    {
+        star1.SetActive(stars.star1);
+        star2.SetActive(stars.star2);
+        star3.SetActive(stars.star3);
     }
 }

@@ -12,13 +12,13 @@ public class Star : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // Update the star count in StarManager
-            LevelStars newStars = new LevelStars(
-                starIndex == 1,
-                starIndex == 2,
-                starIndex == 3
-            );
+            // LevelStars newStars = new LevelStars(
+            //     starIndex == 1,
+            //     starIndex == 2,
+            //     starIndex == 3
+            // );
 
-            GameManager.instance.levelStars = GameManager.instance.levelStars.Union(newStars);
+            GameManager.instance.CollectStar(starIndex);
 
             // Destroy the star after collection
             Destroy(gameObject);
