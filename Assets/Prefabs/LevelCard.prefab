@@ -694,7 +694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7169f8fb7179a4318b27099d7ab3b6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelName: Tutorial 1
+  levelName: name
   star1: {fileID: 5072516860083575986}
   star2: {fileID: 4446988300683324854}
   star3: {fileID: 8901075011515765302}
