@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && canTransformToNormal())
+        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && canTransformToNormal())
         {
             SetStateNormal();
             return;
