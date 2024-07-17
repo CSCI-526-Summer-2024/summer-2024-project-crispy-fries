@@ -35,6 +35,9 @@ public class SpotLightController : MonoBehaviour
     [SerializeField]
     private GameObject timerProgress;
     private Coroutine countdownCoroutine;
+    public int rotationAngleFrom;
+    public int rotationAngleTo;
+    public bool doesRotate;
 
 
     
@@ -155,7 +158,7 @@ public class SpotLightController : MonoBehaviour
                 // Check if the hit object has the "BlocksLight" tag
                 if (hit.collider.CompareTag("BlocksLight"))
                 {
-                    Debug.Log("Obstructed by " + hit.collider.name);
+                    // Debug.Log("Obstructed by " + hit.collider.name);
                     return false; // Point is obstructed, not illuminated
                 }
             }
