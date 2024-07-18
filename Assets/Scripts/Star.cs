@@ -24,4 +24,10 @@ public class Star : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void Update()
+    {
+        // Calculate the new scale based on a sine wave
+        float scaleX = Mathf.Sin(Time.time*3);
+        transform.localScale = new Vector3(scaleX, 1, 1);
+    }
 }

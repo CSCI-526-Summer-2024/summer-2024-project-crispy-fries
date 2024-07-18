@@ -450,9 +450,15 @@ public class PlayerController : MonoBehaviour
          // Transform back to normal state only on ground
         if(isGrounded)
         {
-            RaycastHit2D upHit = Physics2D.Raycast(transform.position, Vector2.up, 1f, tileLayer | glassLayer);
-            RaycastHit2D downHit = Physics2D.Raycast(transform.position, Vector2.down, 1f, tileLayer | glassLayer);
-            if(upHit.collider == null || downHit.collider == null)
+            Vector3 frontCenterPos = transform.position + new Vector3(0.45f,0,0);
+            Vector3 backCenterPos = transform.position - new Vector3(0.45f,0,0);
+
+            RaycastHit2D frontUpHit = Physics2D.Raycast(frontCenterPos, Vector2.up, 1f, tileLayer | glassLayer) ;
+            RaycastHit2D frontDownHit = Physics2D.Raycast(frontCenterPos, Vector2.down, 1f, tileLayer | glassLayer) ;
+            RaycastHit2D backUpHit = Physics2D.Raycast(backCenterPos, Vector2.up, 1f, tileLayer | glassLayer) ;
+            RaycastHit2D backDownHit = Physics2D.Raycast(backCenterPos, Vector2.down, 1f, tileLayer | glassLayer) ;
+
+            if((frontUpHit.collider == null && backUpHit.collider == null) || (frontDownHit.collider == null && backDownHit.collider == null))
             {
                 return true;
             }
