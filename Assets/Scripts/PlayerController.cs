@@ -448,11 +448,11 @@ public class PlayerController : MonoBehaviour
     bool canTransformToNormal()
     {
          // Transform back to normal state only on ground
-        if(isGrounded && feetOn == FloorType.Ground)
+        if(isGrounded)
         {
-            //Check that there is no platform right above player
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, tileLayer | glassLayer);
-            if(hit.collider == null)
+            RaycastHit2D upHit = Physics2D.Raycast(transform.position, Vector2.up, 1f, tileLayer | glassLayer);
+            RaycastHit2D downHit = Physics2D.Raycast(transform.position, Vector2.down, 1f, tileLayer | glassLayer);
+            if(upHit.collider == null || downHit.collider == null)
             {
                 return true;
             }
