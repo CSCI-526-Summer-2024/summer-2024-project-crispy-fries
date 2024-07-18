@@ -42,6 +42,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/Level 8.unity
     guid: 93484a21cf16c4157988609e3e286280
   - enabled: 1
-    path: Assets/Scenes/Levels/Level 6.unity
+    path: Assets/Scenes/Levels/Boat.unity
     guid: 19d2f149af14efc4aa2999853863ecff
   m_configObjects: {}
