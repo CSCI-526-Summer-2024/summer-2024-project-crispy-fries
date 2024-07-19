@@ -39,6 +39,7 @@ public class SpotLightController : MonoBehaviour
     public int rotationAngleTo;
     public bool doesRotate;
 
+    public bool isDeathLight;
 
     
     public string LightColorHex
@@ -362,7 +363,9 @@ public class SpotLightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isDeathLight && this.gameObject.transform.position.y <= 5){
+            this.gameObject.transform.position += new Vector3(0, 1.75f, 0) * Time.deltaTime ;
+        }
     }
 
     #if UNITY_EDITOR

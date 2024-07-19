@@ -1090,6 +1090,7 @@ MonoBehaviour:
   rotationAngleFrom: 0
   rotationAngleTo: 0
   doesRotate: 0
+  isDeathLight: 0
 --- !u!212 &5612869063410356524
 SpriteRenderer:
   m_ObjectHideFlags: 0
