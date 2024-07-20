@@ -184,12 +184,12 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (!gameManager.GameIsPaused && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.RegularTile)
+        if (!gameManager.GameIsPaused && Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.RegularTile)
         {
             SetStateShadowDive();
         }
-        else if ((!gameManager.GameIsPaused && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.GlassTile) || 
-        (!gameManager.GameIsPaused && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && isInLight && isGrounded && feetOn == FloorType.Ground))
+        else if ((!gameManager.GameIsPaused && Input.GetKeyDown(KeyCode.S) && !isInLight && isGrounded && feetOn == FloorType.Ground && floorMaterial == FloorMaterial.GlassTile) || 
+        (!gameManager.GameIsPaused && Input.GetKeyDown(KeyCode.S) && isInLight && isGrounded && feetOn == FloorType.Ground))
         {
             // trying to dive on glass
             //StartCoroutine(cameraShake.Shake(0.3f, 0.1f));
@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
 
        
-        if (!gameManager.GameIsPaused  && (Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && canTransformToNormal())
+        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.S) && canTransformToNormal())
         {
             SetStateNormal();
             return;
