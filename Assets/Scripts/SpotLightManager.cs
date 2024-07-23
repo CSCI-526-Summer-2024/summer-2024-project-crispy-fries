@@ -45,16 +45,8 @@ public class SpotLightManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.Q) && toggleableLightSelectedIndex!=-1)
-        {
-            toggleableLightSelectedIndex--;
-            if (toggleableLightSelectedIndex < 0)
-                toggleableLightSelectedIndex = toggleableLights.Count - 1;
-            setTargetPosition();
-        }
-
-        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.E) && toggleableLightSelectedIndex!=-1)
+        
+        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.A) && toggleableLightSelectedIndex!=-1)
         {
             toggleableLightSelectedIndex++;
             if (toggleableLightSelectedIndex >= toggleableLights.Count)
@@ -62,7 +54,7 @@ public class SpotLightManager : MonoBehaviour
             setTargetPosition();
         }
 
-        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.LeftShift))
+        if (!gameManager.GameIsPaused  && Input.GetKeyDown(KeyCode.D))
         {
             ToggleSelectedLight();
         }
